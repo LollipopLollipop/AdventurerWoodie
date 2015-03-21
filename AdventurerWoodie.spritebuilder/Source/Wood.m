@@ -10,4 +10,9 @@
 
 @implementation Wood
 
+- (void)didLoadFromCCB {
+    self.physicsBody.collisionType = @"goal";
+    self.physicsBody.sensor = YES;
+}
+
 @end

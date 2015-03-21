@@ -94,7 +94,9 @@
 		BC5399DA1A44DCC90063F482 /* GLActivityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC5399D51A44DCC90063F482 /* GLActivityKit.framework */; };
 		BC5399DB1A44DCC90063F482 /* JavaFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC5399D61A44DCC90063F482 /* JavaFoundation.framework */; };
 		BC5399DC1A44DCC90063F482 /* JavaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC5399D71A44DCC90063F482 /* JavaKit.framework */; };
-		F4DD2FF41A98EBD1006602D0 /* Gameplay.m in Sources */ = {isa = PBXBuildFile; fileRef = F4DD2FF31A98EBD1006602D0 /* Gameplay.m */; };
+		F40E03171ABA696C005C0447 /* Shark.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E03161ABA696C005C0447 /* Shark.m */; };
+		F40E8C681ABDCF0B00566710 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E8C671ABDCF0B00566710 /* GameScene.m */; };
+		F40E8C6D1ABDCF7300566710 /* GameMechanics.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E8C6C1ABDCF7300566710 /* GameMechanics.m */; };
 		F4E051F11A9BDFE00013B488 /* Wood.m in Sources */ = {isa = PBXBuildFile; fileRef = F4E051F01A9BDFE00013B488 /* Wood.m */; };
 		F4E051FA1A9BEEED0013B488 /* WoodieWalkRight.m in Sources */ = {isa = PBXBuildFile; fileRef = F4E051F91A9BEEED0013B488 /* WoodieWalkRight.m */; };
 /* End PBXBuildFile section */
@@ -216,8 +218,12 @@
 		BC5399D61A44DCC90063F482 /* JavaFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaFoundation.framework; path = "../../../../Library/Application Support/Developer/Shared/Xcode/Platforms/Android.platform/Developer/SDKs/SBAndroid.sdk/System/Library/Frameworks/JavaFoundation.framework"; sourceTree = "<group>"; };
 		BC5399D71A44DCC90063F482 /* JavaKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaKit.framework; path = "../../../../Library/Application Support/Developer/Shared/Xcode/Platforms/Android.platform/Developer/SDKs/SBAndroid.sdk/System/Library/Frameworks/JavaKit.framework"; sourceTree = "<group>"; };
 		D352B48019EC608A00829775 /* MetalShaders */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MetalShaders; path = Source/MetalShaders; sourceTree = "<group>"; };
-		F4DD2FF21A98EBD1006602D0 /* Gameplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Gameplay.h; path = Source/Gameplay.h; sourceTree = "<group>"; };
-		F4DD2FF31A98EBD1006602D0 /* Gameplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Gameplay.m; path = Source/Gameplay.m; sourceTree = "<group>"; };
+		F40E03151ABA696C005C0447 /* Shark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Shark.h; path = Source/Shark.h; sourceTree = "<group>"; };
+		F40E03161ABA696C005C0447 /* Shark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Shark.m; path = Source/Shark.m; sourceTree = "<group>"; };
+		F40E8C661ABDCF0B00566710 /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameScene.h; path = Source/GameScene.h; sourceTree = "<group>"; };
+		F40E8C671ABDCF0B00566710 /* GameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameScene.m; path = Source/GameScene.m; sourceTree = "<group>"; };
+		F40E8C6B1ABDCF7300566710 /* GameMechanics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameMechanics.h; path = Source/GameMechanics.h; sourceTree = "<group>"; };
+		F40E8C6C1ABDCF7300566710 /* GameMechanics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameMechanics.m; path = Source/GameMechanics.m; sourceTree = "<group>"; };
 		F4E051EF1A9BDFE00013B488 /* Wood.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wood.h; path = Source/Wood.h; sourceTree = "<group>"; };
 		F4E051F01A9BDFE00013B488 /* Wood.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Wood.m; path = Source/Wood.m; sourceTree = "<group>"; };
 		F4E051F81A9BEEED0013B488 /* WoodieWalkRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WoodieWalkRight.h; path = Source/WoodieWalkRight.h; sourceTree = "<group>"; };
@@ -449,12 +455,16 @@
 				B7378992180767190076A88C /* MainScene.h */,
 				B7378993180767190076A88C /* MainScene.m */,
 				D352B48019EC608A00829775 /* MetalShaders */,
-				F4DD2FF21A98EBD1006602D0 /* Gameplay.h */,
-				F4DD2FF31A98EBD1006602D0 /* Gameplay.m */,
+				F40E8C661ABDCF0B00566710 /* GameScene.h */,
+				F40E8C671ABDCF0B00566710 /* GameScene.m */,
+				F40E8C6B1ABDCF7300566710 /* GameMechanics.h */,
+				F40E8C6C1ABDCF7300566710 /* GameMechanics.m */,
 				F4E051F81A9BEEED0013B488 /* WoodieWalkRight.h */,
 				F4E051F91A9BEEED0013B488 /* WoodieWalkRight.m */,
 				F4E051EF1A9BDFE00013B488 /* Wood.h */,
 				F4E051F01A9BDFE00013B488 /* Wood.m */,
+				F40E03151ABA696C005C0447 /* Shark.h */,
+				F40E03161ABA696C005C0447 /* Shark.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -834,10 +844,12 @@
 			files = (
 				F4E051F11A9BDFE00013B488 /* Wood.m in Sources */,
 				B73789871807631A0076A88C /* main.m in Sources */,
+				F40E03171ABA696C005C0447 /* Shark.m in Sources */,
 				F4E051FA1A9BEEED0013B488 /* WoodieWalkRight.m in Sources */,
-				F4DD2FF41A98EBD1006602D0 /* Gameplay.m in Sources */,
 				7A046D8C19E8A20E004C4763 /* MainScene.m in Sources */,
+				F40E8C681ABDCF0B00566710 /* GameScene.m in Sources */,
 				5B121038197487F2004C1E1D /* AppDelegate.m in Sources */,
+				F40E8C6D1ABDCF7300566710 /* GameMechanics.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

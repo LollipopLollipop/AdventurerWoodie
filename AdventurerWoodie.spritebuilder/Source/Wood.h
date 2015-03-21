@@ -7,6 +7,7 @@
 //
 
 #import "CCSprite.h"
+#import "CCNode.h"
 
 @interface Wood : CCSprite
 

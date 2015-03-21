@@ -10,7 +10,7 @@
 		<false/>
 	</dict>
 	<key>UUID</key>
-	<integer>2</integer>
+	<integer>4</integer>
 	<key>centeredOrigin</key>
 	<false/>
 	<key>currentResolution</key>
@@ -41,12 +41,12 @@
 		<array>
 			<dict>
 				<key>UUID</key>
-				<integer>1</integer>
+				<integer>3</integer>
 				<key>animatedProperties</key>
 				<dict>
 					<key>0</key>
 					<dict>
-						<key>position</key>
+						<key>rotation</key>
 						<dict>
 							<key>keyframes</key>
 							<array>
@@ -57,16 +57,13 @@
 										<integer>1</integer>
 									</dict>
 									<key>name</key>
-									<string>position</string>
+									<string>rotation</string>
 									<key>time</key>
 									<real>0.0</real>
 									<key>type</key>
-									<integer>3</integer>
+									<integer>2</integer>
 									<key>value</key>
-									<array>
-										<real>0.0</real>
-										<real>-10</real>
-									</array>
+									<real>0.0</real>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -75,16 +72,13 @@
 										<integer>1</integer>
 									</dict>
 									<key>name</key>
-									<string>position</string>
+									<string>rotation</string>
 									<key>time</key>
 									<real>1</real>
 									<key>type</key>
-									<integer>3</integer>
+									<integer>2</integer>
 									<key>value</key>
-									<array>
-										<real>0.0</real>
-										<real>-20</real>
-									</array>
+									<real>-15</real>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -93,58 +87,19 @@
 										<integer>1</integer>
 									</dict>
 									<key>name</key>
-									<string>position</string>
+									<string>rotation</string>
 									<key>time</key>
 									<real>2</real>
 									<key>type</key>
-									<integer>3</integer>
+									<integer>2</integer>
 									<key>value</key>
-									<array>
-										<real>0.0</real>
-										<real>-10</real>
-									</array>
-								</dict>
-								<dict>
-									<key>easing</key>
-									<dict>
-										<key>type</key>
-										<integer>1</integer>
-									</dict>
-									<key>name</key>
-									<string>position</string>
-									<key>time</key>
-									<real>3</real>
-									<key>type</key>
-									<integer>3</integer>
-									<key>value</key>
-									<array>
-										<real>0.0</real>
-										<real>0.0</real>
-									</array>
-								</dict>
-								<dict>
-									<key>easing</key>
-									<dict>
-										<key>type</key>
-										<integer>1</integer>
-									</dict>
-									<key>name</key>
-									<string>position</string>
-									<key>time</key>
-									<real>4</real>
-									<key>type</key>
-									<integer>3</integer>
-									<key>value</key>
-									<array>
-										<real>0.0</real>
-										<real>-10</real>
-									</array>
+									<real>0.0</real>
 								</dict>
 							</array>
 							<key>name</key>
-							<string>position</string>
+							<string>rotation</string>
 							<key>type</key>
-							<integer>3</integer>
+							<integer>2</integer>
 						</dict>
 					</dict>
 				</dict>
@@ -155,7 +110,7 @@
 				<key>customClass</key>
 				<string></string>
 				<key>displayName</key>
-				<string>wave-2</string>
+				<string>1235527</string>
 				<key>memberVarAssignmentName</key>
 				<string></string>
 				<key>memberVarAssignmentType</key>
@@ -171,11 +126,6 @@
 						<string></string>
 					</dict>
 					<dict>
-						<key>baseValue</key>
-						<array>
-							<real>0.0</real>
-							<real>0.0</real>
-						</array>
 						<key>name</key>
 						<string>position</string>
 						<key>type</key>
@@ -183,7 +133,7 @@
 						<key>value</key>
 						<array>
 							<real>0.0</real>
-							<real>-17.333333969116211</real>
+							<real>0.0</real>
 							<integer>0</integer>
 							<integer>0</integer>
 							<integer>0</integer>
@@ -214,6 +164,16 @@
 						</array>
 					</dict>
 					<dict>
+						<key>baseValue</key>
+						<real>0.0</real>
+						<key>name</key>
+						<string>rotation</string>
+						<key>type</key>
+						<string>Degrees</string>
+						<key>value</key>
+						<real>-10.5</real>
+					</dict>
+					<dict>
 						<key>name</key>
 						<string>spriteFrame</string>
 						<key>type</key>
@@ -221,7 +181,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>Wave/wave-2.png</string>
+							<string>Shark/1235527.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -262,7 +222,7 @@
 			</dict>
 		</array>
 		<key>customClass</key>
-		<string></string>
+		<string>Shark</string>
 		<key>displayName</key>
 		<string>CCNode</string>
 		<key>memberVarAssignmentName</key>
@@ -296,40 +256,58 @@
 			<key>points</key>
 			<array>
 				<array>
-					<real>-479.7734375</real>
-					<real>-176.171875</real>
+					<real>-18.1171875</real>
+					<real>-8.58203125</real>
 				</array>
 				<array>
-					<real>-478.8359375</real>
-					<real>-142.61328125</real>
+					<real>-33.79296875</real>
+					<real>38.40234375</real>
 				</array>
 				<array>
-					<real>480.5</real>
-					<real>-146.75</real>
+					<real>37.55859375</real>
+					<real>22.3359375</real>
 				</array>
 				<array>
-					<real>480.015625</real>
-					<real>-176.625</real>
+					<real>22.70703125</real>
+					<real>3.53515625</real>
+				</array>
+				<array>
+					<real>54.4453125</real>
+					<real>1.23046875</real>
 				</array>
 			</array>
 			<key>polygons</key>
 			<array>
 				<array>
 					<array>
-						<real>480.015625</real>
-						<real>-176.625</real>
+						<real>-18.1171875</real>
+						<real>-8.58203125</real>
 					</array>
 					<array>
-						<real>480.5</real>
-						<real>-146.75</real>
+						<real>54.4453125</real>
+						<real>1.23046875</real>
 					</array>
 					<array>
-						<real>-478.8359375</real>
-						<real>-142.61328125</real>
+						<real>22.70703125</real>
+						<real>3.53515625</real>
+					</array>
+				</array>
+				<array>
+					<array>
+						<real>22.70703125</real>
+						<real>3.53515625</real>
 					</array>
 					<array>
-						<real>-479.7734375</real>
-						<real>-176.171875</real>
+						<real>37.55859375</real>
+						<real>22.3359375</real>
+					</array>
+					<array>
+						<real>-33.79296875</real>
+						<real>38.40234375</real>
+					</array>
+					<array>
+						<real>-18.1171875</real>
+						<real>-8.58203125</real>
 					</array>
 				</array>
 			</array>
@@ -447,13 +425,13 @@
 			<key>chainedSequenceId</key>
 			<integer>0</integer>
 			<key>length</key>
-			<real>4</real>
+			<real>2</real>
 			<key>name</key>
-			<string>RisingWave</string>
+			<string>RotateShark</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>1.2666666507720947</real>
+			<real>0.69999998807907104</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

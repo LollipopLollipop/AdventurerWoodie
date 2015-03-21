@@ -1,13 +1,13 @@
 //
-//  Gameplay.h
+//  Shark.h
 //  AdventurerWoodie
 //
-//  Created by Ding ZHAO on 2/21/15.
+//  Created by Ding ZHAO on 3/18/15.
 //  Copyright (c) 2015 Apportable. All rights reserved.
 //
 
 #import "CCNode.h"
 
-@interface Gameplay : CCNode
-
+@interface Shark : CCNode
+- (void)setupRandomPosition;
 @end

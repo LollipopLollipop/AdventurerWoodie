@@ -3,7 +3,7 @@
 @implementation MainScene
 
 - (void)play {
-    CCScene *gameplayScene = [CCBReader loadAsScene:@"Gameplay"];
+    CCScene *gameplayScene = [CCBReader loadAsScene:@"GameScene"];
     [[CCDirector sharedDirector] replaceScene:gameplayScene];
 }
 

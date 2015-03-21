@@ -7,7 +7,7 @@
 //
 
 #import "CCSprite.h"
-
+#import "CCNode.h"
 @interface WoodieWalkRight : CCSprite
 
 @end
