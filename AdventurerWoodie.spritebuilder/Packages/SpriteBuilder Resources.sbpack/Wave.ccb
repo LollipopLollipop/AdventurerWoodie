@@ -196,7 +196,7 @@
 						<string>Point</string>
 						<key>value</key>
 						<array>
-							<real>0.5</real>
+							<real>0.0</real>
 							<real>0.5</real>
 						</array>
 					</dict>
@@ -257,12 +257,14 @@
 						<array/>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
-		<string></string>
+		<string>Wave</string>
 		<key>displayName</key>
 		<string>CCNode</string>
 		<key>memberVarAssignmentName</key>
@@ -449,7 +451,7 @@
 			<key>name</key>
 			<string>FallingWave</string>
 			<key>offset</key>
-			<real>0.9453125</real>
+			<real>0.93281173706054688</real>
 			<key>position</key>
 			<real>4</real>
 			<key>resolution</key>

@@ -14,10 +14,21 @@
 - (void)initialize
 {
     character = (WoodieWalkRight*)[CCBReader load:@"WoodieWalkRight"];
-    character.scaleX = 0.2f;
-    character.scaleY = 0.2f;
     character.position = ccp(_startStation.position.x, _startStation.position.y+80);
-    [_woodContainer addChild:character];
+    //[_woodContainer addChild:character];
+    rearWave1 = (Wave*)[CCBReader load:@"Wave"];
+    rearWave1.position = ccp(0, 155);
+    rearWave2 = (Wave*)[CCBReader load:@"Wave"];
+    rearWave2.position = ccp(960, 155);
+    frontWave1 = (WaveLightBlue*)[CCBReader load:@"WaveLightBlue"];
+    frontWave1.position = ccp(0, 155);
+    frontWave2 = (WaveLightBlue*)[CCBReader load:@"WaveLightBlue"];
+    frontWave2.position = ccp(960, 155);
+    [_physicsNode addChild:character];
+    [_physicsNode addChild:rearWave1];
+    [_physicsNode addChild:rearWave2];
+    [_physicsNode addChild:frontWave1];
+    [_physicsNode addChild:frontWave2];
     [self addObstacle];
     timeSinceObstacle = 0.0f;
 }
@@ -46,7 +57,8 @@
     Wood* wood= (Wood*)[CCBReader load:@"Wood"];
     wood.position = touchLocation;
     //add new wood to the parent physics node
-    [_woodContainer addChild:wood];
+    //[_woodContainer addChild:wood];
+    [_physicsNode addChild:wood];
     
 }
 @end

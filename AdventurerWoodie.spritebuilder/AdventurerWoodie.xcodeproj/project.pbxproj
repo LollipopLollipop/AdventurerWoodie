@@ -95,6 +95,8 @@
 		BC5399DB1A44DCC90063F482 /* JavaFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC5399D61A44DCC90063F482 /* JavaFoundation.framework */; };
 		BC5399DC1A44DCC90063F482 /* JavaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC5399D71A44DCC90063F482 /* JavaKit.framework */; };
 		F40E03171ABA696C005C0447 /* Shark.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E03161ABA696C005C0447 /* Shark.m */; };
+		F40E54B61AC0B2D700DFD577 /* Wave.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E54B51AC0B2D700DFD577 /* Wave.m */; };
+		F40E54BB1AC0B2EA00DFD577 /* WaveLightBlue.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E54BA1AC0B2EA00DFD577 /* WaveLightBlue.m */; };
 		F40E8C681ABDCF0B00566710 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E8C671ABDCF0B00566710 /* GameScene.m */; };
 		F40E8C6D1ABDCF7300566710 /* GameMechanics.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E8C6C1ABDCF7300566710 /* GameMechanics.m */; };
 		F4E051F11A9BDFE00013B488 /* Wood.m in Sources */ = {isa = PBXBuildFile; fileRef = F4E051F01A9BDFE00013B488 /* Wood.m */; };
@@ -220,6 +222,10 @@
 		D352B48019EC608A00829775 /* MetalShaders */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MetalShaders; path = Source/MetalShaders; sourceTree = "<group>"; };
 		F40E03151ABA696C005C0447 /* Shark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Shark.h; path = Source/Shark.h; sourceTree = "<group>"; };
 		F40E03161ABA696C005C0447 /* Shark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Shark.m; path = Source/Shark.m; sourceTree = "<group>"; };
+		F40E54B41AC0B2D700DFD577 /* Wave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wave.h; path = Source/Wave.h; sourceTree = "<group>"; };
+		F40E54B51AC0B2D700DFD577 /* Wave.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Wave.m; path = Source/Wave.m; sourceTree = "<group>"; };
+		F40E54B91AC0B2EA00DFD577 /* WaveLightBlue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveLightBlue.h; path = Source/WaveLightBlue.h; sourceTree = "<group>"; };
+		F40E54BA1AC0B2EA00DFD577 /* WaveLightBlue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WaveLightBlue.m; path = Source/WaveLightBlue.m; sourceTree = "<group>"; };
 		F40E8C661ABDCF0B00566710 /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameScene.h; path = Source/GameScene.h; sourceTree = "<group>"; };
 		F40E8C671ABDCF0B00566710 /* GameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameScene.m; path = Source/GameScene.m; sourceTree = "<group>"; };
 		F40E8C6B1ABDCF7300566710 /* GameMechanics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameMechanics.h; path = Source/GameMechanics.h; sourceTree = "<group>"; };
@@ -459,6 +465,10 @@
 				F40E8C671ABDCF0B00566710 /* GameScene.m */,
 				F40E8C6B1ABDCF7300566710 /* GameMechanics.h */,
 				F40E8C6C1ABDCF7300566710 /* GameMechanics.m */,
+				F40E54B41AC0B2D700DFD577 /* Wave.h */,
+				F40E54B51AC0B2D700DFD577 /* Wave.m */,
+				F40E54B91AC0B2EA00DFD577 /* WaveLightBlue.h */,
+				F40E54BA1AC0B2EA00DFD577 /* WaveLightBlue.m */,
 				F4E051F81A9BEEED0013B488 /* WoodieWalkRight.h */,
 				F4E051F91A9BEEED0013B488 /* WoodieWalkRight.m */,
 				F4E051EF1A9BDFE00013B488 /* Wood.h */,
@@ -843,7 +853,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4E051F11A9BDFE00013B488 /* Wood.m in Sources */,
+				F40E54B61AC0B2D700DFD577 /* Wave.m in Sources */,
 				B73789871807631A0076A88C /* main.m in Sources */,
+				F40E54BB1AC0B2EA00DFD577 /* WaveLightBlue.m in Sources */,
 				F40E03171ABA696C005C0447 /* Shark.m in Sources */,
 				F4E051FA1A9BEEED0013B488 /* WoodieWalkRight.m in Sources */,
 				7A046D8C19E8A20E004C4763 /* MainScene.m in Sources */,

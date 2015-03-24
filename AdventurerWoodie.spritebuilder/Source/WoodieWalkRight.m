@@ -7,8 +7,17 @@
 //
 
 #import "WoodieWalkRight.h"
+#import "GameMechanics.h"
 
 
 @implementation WoodieWalkRight
+- (void)didLoadFromCCB
+{
+    self.scaleX = 0.2f;
+    self.scaleY = 0.2f;
+    self.zOrder = DrawingOrderHero;
+    self.physicsBody.collisionType = @"character";
+}
+
 
 @end

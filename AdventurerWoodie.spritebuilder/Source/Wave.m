@@ -1,20 +1,18 @@
 //
-//  Wood.m
+//  Wave.m
 //  AdventurerWoodie
 //
-//  Created by Ding ZHAO on 2/23/15.
+//  Created by Ding ZHAO on 3/23/15.
 //  Copyright (c) 2015 Apportable. All rights reserved.
 //
 
-#import "Wood.h"
+#import "Wave.h"
 #import "GameMechanics.h"
 
-@implementation Wood
-
+@implementation Wave
 - (void)didLoadFromCCB {
-    self.zOrder = DrawingOrderWood;
-    self.physicsBody.collisionType = @"goal";
+    self.zOrder = DrawingOrderRearWave;
+    //self.physicsBody.collisionType = @"level";
     self.physicsBody.sensor = YES;
 }
-
 @end

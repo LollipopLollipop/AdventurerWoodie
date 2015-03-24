@@ -8,10 +8,17 @@
 
 #import "CCNode.h"
 #import "WoodieWalkRight.h"
+#import "Wave.h"
+#import "WaveLightBlue.h"
+
+
 typedef NS_ENUM(NSInteger, DrawingOrder) {
-    DrawingOrderPipes,
-    DrawingOrderGround,
-    DrawingOrderHero
+    
+    DrawingOrderRearWave,
+    DrawingOrderHero,
+    DrawingOrderWood,
+    DrawingOrderObstacles,
+    DrawingOrderFrontWave
 };
 
 
@@ -19,8 +26,11 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
 {
     // define variables here;
     WoodieWalkRight*    character;
+    Wave*               rearWave1;
+    Wave*               rearWave2;
+    WaveLightBlue*      frontWave1;
+    WaveLightBlue*      frontWave2;
     CCPhysicsNode       *_physicsNode;
-    CCPhysicsNode       *_woodContainer;
     CCNode              *_startStation;
     float               timeSinceObstacle;
 }

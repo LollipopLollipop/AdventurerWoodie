@@ -7,6 +7,7 @@
 //
 
 #import "Shark.h"
+#import "GameMechanics.h"
 
 @implementation Shark
 
@@ -17,7 +18,8 @@ static const CGFloat minimumXPosition = 50.f;
 static const CGFloat maximumXPosition = 500.f;
 
 - (void)didLoadFromCCB {
-    self.physicsBody.collisionType = @"level";
+    self.zOrder = DrawingOrderObstacles;
+    //self.physicsBody.collisionType = @"level";
     self.physicsBody.sensor = YES;
 }
 

@@ -38,12 +38,8 @@
     CCNode *_cloud2;
     NSArray *_clouds;
     //background waves
-    CCNode *_frontWave1;
-    CCNode *_frontWave2;
-    NSArray *_frontWaves;
     
-    CCNode *_rearWave1;
-    CCNode *_rearWave2;
+    NSArray *_frontWaves;
     NSArray *_rearWaves;
     
 
@@ -59,50 +55,33 @@
 
 // is called when CCB file has completed loading
 - (void)didLoadFromCCB {
+    CCLOG(@"call super init");
+    [super initialize];
+    
     self.userInteractionEnabled = TRUE;
     
     _clouds = @[_cloud1, _cloud2];
-    _frontWaves = @[_frontWave1, _frontWave2];
-    _rearWaves = @[_rearWave1, _rearWave2];
+    _frontWaves = @[frontWave1, frontWave2];
+    _rearWaves = @[rearWave1, rearWave2];
     
     _parallaxBackground = [CCParallaxNode node];
     [_parallaxContainer addChild:_parallaxBackground];
     
-    // Note that the bush ratio is larger than the cloud
-    _waveParallaxRatio = ccp(0.9, 1);
+    _waveParallaxRatio = ccp(0.7,1);
     _cloudParallaxRatio = ccp(0.5, 1);
-    
-    for (CCNode *frontWave in _frontWaves) {
-        /*CGPoint offset = frontWave.position;
-        [self removeChild:frontWave];
-        [_parallaxBackground addChild:frontWave z:0 parallaxRatio:_waveParallaxRatio positionOffset:offset];*/
-        frontWave.physicsBody.collisionType = @"level";
-        frontWave.zOrder = DrawingOrderGround;
-    }
-    for (CCNode *rearWave in _rearWaves) {
-        /*CGPoint offset = rearWave.position;
-        [self removeChild:rearWave];
-        [_parallaxBackground addChild:rearWave z:0 parallaxRatio:_waveParallaxRatio positionOffset:offset];*/
-        rearWave.physicsBody.collisionType = @"level";
-        rearWave.zOrder = DrawingOrderGround;
-        
-    }
     
     for (CCNode *cloud in _clouds) {
         CGPoint offset = cloud.position;
         [self removeChild:cloud];
         [_parallaxBackground addChild:cloud z:0 parallaxRatio:_cloudParallaxRatio positionOffset:offset];
     }
-    
-    //The delegate object that you want to respond to collisions for the collision behavior.
+        //The delegate object that you want to respond to collisions for the collision behavior.
     _physicsNode.collisionDelegate = self;
-    _woodContainer.collisionDelegate = self;
     
     _obstacles = [NSMutableArray array];
     distance = 0;
     _scoreLabel.visible = true;
     
-    [super initialize];
 }
 
 #pragma mark - Touch Handling
@@ -153,12 +132,11 @@
     Shark *shark = (Shark *)[CCBReader load:@"Shark"];
     
     CGPoint screenPosition = [self convertToWorldSpace:ccp(0, 0)];//y position is fixed at 0
-    CGPoint worldPosition = [_woodContainer convertToNodeSpace:screenPosition];
+    CGPoint worldPosition = [_physicsNode convertToNodeSpace:screenPosition];
     
     shark.position = worldPosition;
     [shark setupRandomPosition];
-    shark.zOrder = DrawingOrderPipes;//?
-    [_woodContainer addChild:shark];
+    [_physicsNode addChild:shark];
     [_obstacles addObject:shark];
 }
 
@@ -188,28 +166,31 @@
     }*/
     
     _physicsNode.position = ccp(_physicsNode.position.x - (character.physicsBody.velocity.x * delta), _physicsNode.position.y);
+    _startStation.position = ccp(_startStation.position.x - (character.physicsBody.velocity.x * delta),
+                                 _startStation.position.y);
     
-    // loop the ground
-    for (CCNode *frontWave in _frontWaves) {
+    
+    // loop the wave
+    for (WaveLightBlue *frontWave in _frontWaves) {
         // get the world position of the ground
         CGPoint waveWorldPosition = [_physicsNode convertToWorldSpace:frontWave.position];
         // get the screen position of the ground
         CGPoint waveScreenPosition = [self convertToNodeSpace:waveWorldPosition];
         
         // if the left corner is one complete width off the screen, move it to the right
-        if (waveScreenPosition.x <= (-1 * frontWave.contentSize.width)) {
-            frontWave.position = ccp(frontWave.position.x + 2 * frontWave.contentSize.width, frontWave.position.y);
+        if (waveScreenPosition.x <= -960) {
+            frontWave.position = ccp(frontWave.position.x + 2 * 960, frontWave.position.y);
         }
     }
-    for (CCNode *rearWave in _rearWaves) {
+    for (Wave *rearWave in _rearWaves) {
         // get the world position of the ground
         CGPoint waveWorldPosition = [_physicsNode convertToWorldSpace:rearWave.position];
         // get the screen position of the ground
         CGPoint waveScreenPosition = [self convertToNodeSpace:waveWorldPosition];
         
         // if the left corner is one complete width off the screen, move it to the right
-        if (waveScreenPosition.x <= (-1 * rearWave.contentSize.width)) {
-            rearWave.position = ccp(rearWave.position.x + 2 * rearWave.contentSize.width, rearWave.position.y);
+        if (waveScreenPosition.x <= -960) {
+            rearWave.position = ccp(rearWave.position.x + 2 * 960, rearWave.position.y);
         }
     }
     
@@ -217,7 +198,7 @@
     
     /*
     // loop the waves
-    for (CCNode *frontWave in _frontWaves) {
+    for (Wave *frontWave in _frontWaves) {
         // get the world position of the bush
         CGPoint waveWorldPosition = [_parallaxBackground convertToWorldSpace:frontWave.position];
         // get the screen position of the bush
@@ -233,7 +214,7 @@
             }
         }
     }
-    for (CCNode *rearWave in _rearWaves) {
+    for (Wave *rearWave in _rearWaves) {
         // get the world position of the bush
         CGPoint waveWorldPosition = [_parallaxBackground convertToWorldSpace:rearWave.position];
         // get the screen position of the bush
@@ -249,6 +230,8 @@
             }
         }
     }*/
+    
+    
     
     // loop the clouds
     for (CCNode *cloud in _clouds) {
@@ -292,7 +275,7 @@
         @try
         {
             //character.physicsBody.velocity = ccp(80.f, clampf(character.physicsBody.velocity.y, -MAXFLOAT, 200.f));
-            character.physicsBody.velocity = ccp(80.f,0.f);
+            character.physicsBody.velocity = ccp(100.f,0.f);
             
             [super update:delta];
         }
