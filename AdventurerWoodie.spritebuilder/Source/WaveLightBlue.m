@@ -13,7 +13,7 @@
 
 - (void)didLoadFromCCB {
     self.zOrder = DrawingOrderFrontWave;
-    //self.physicsBody.collisionType = @"level";
+    self.physicsBody.collisionType = @"wave";
     self.physicsBody.sensor = YES;
 }
 @end

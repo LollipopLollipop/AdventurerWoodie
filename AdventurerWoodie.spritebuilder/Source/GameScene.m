@@ -28,7 +28,7 @@
 
 @implementation GameScene{
     CGPoint _cloudParallaxRatio;
-    CGPoint _waveParallaxRatio;
+    
     
     CCNode *_parallaxContainer;
     CCParallaxNode *_parallaxBackground;
@@ -46,10 +46,11 @@
     NSTimeInterval _sinceTouch;
     //array of randomly placed obstacles (sharks in level 1)
     NSMutableArray *_obstacles;
+    NSMutableArray *_woods;
     CCButton *_restartButton;
     BOOL _gameOver;
     CCLabelTTF *_scoreLabel;
-    int distance;
+    int _distance;
 }
 
 
@@ -61,13 +62,13 @@
     self.userInteractionEnabled = TRUE;
     
     _clouds = @[_cloud1, _cloud2];
-    _frontWaves = @[frontWave1, frontWave2];
-    _rearWaves = @[rearWave1, rearWave2];
+    _frontWaves = @[_frontWave1, _frontWave2];
+    _rearWaves = @[_rearWave1, _rearWave2];
     
     _parallaxBackground = [CCParallaxNode node];
     [_parallaxContainer addChild:_parallaxBackground];
     
-    _waveParallaxRatio = ccp(0.7,1);
+    
     _cloudParallaxRatio = ccp(0.5, 1);
     
     for (CCNode *cloud in _clouds) {
@@ -79,7 +80,8 @@
     _physicsNode.collisionDelegate = self;
     
     _obstacles = [NSMutableArray array];
-    distance = 0;
+    _woods = [NSMutableArray array];
+    _distance = 0;
     _scoreLabel.visible = true;
     
 }
@@ -93,6 +95,7 @@
         @try
         {
             [super touchBegan:touch withEvent:event];
+            
         }
         @catch(NSException* ex)
         {
@@ -108,9 +111,9 @@
         _gameOver = TRUE;
         _restartButton.visible = TRUE;
         //comes with FB check later
-        character.physicsBody.velocity = ccp(0.0f, 0.0f);
-        character.physicsBody.allowsRotation = FALSE;
-        [character stopAllActions];
+        _character.physicsBody.velocity = ccp(0.0f, 0.0f);
+        _character.physicsBody.allowsRotation = FALSE;
+        [_character stopAllActions];
         
         CCActionMoveBy *moveBy = [CCActionMoveBy actionWithDuration:0.2f position:ccp(-2, 2)];
         CCActionInterval *reverseMovement = [moveBy reverse];
@@ -124,6 +127,7 @@
 - (void)restart {
     CCScene *scene = [CCBReader loadAsScene:@"GameScene"];
     [[CCDirector sharedDirector] replaceScene:scene];
+    
 }
 
 #pragma mark - Obstacle Spawning
@@ -140,12 +144,25 @@
     [_obstacles addObject:shark];
 }
 
+#pragma mak - Wood Placement
+- (void)placeWood:(CGPoint)touchLocation
+{
+    CGPoint screenPosition = [self convertToWorldSpace:touchLocation];
+    CGPoint worldPosition = [_physicsNode convertToNodeSpace:screenPosition];
+    //place the wood on the touch location
+    Wood* wood= (Wood*)[CCBReader load:@"Wood"];
+    wood.position = worldPosition;
+    //add new wood to the parent physics node
+    [_physicsNode addChild:wood];
+    [_woods addObject:wood];
+}
+
 
 #pragma mark - Update
 
 - (void)showScore
 {
-    _scoreLabel.string = [NSString stringWithFormat:@"%d", distance];
+    _scoreLabel.string = [NSString stringWithFormat:@"%d", _distance];
     _scoreLabel.visible = true;
 }
 
@@ -165,9 +182,7 @@
         [character.physicsBody applyAngularImpulse:-40000.f*delta];
     }*/
     
-    _physicsNode.position = ccp(_physicsNode.position.x - (character.physicsBody.velocity.x * delta), _physicsNode.position.y);
-    _startStation.position = ccp(_startStation.position.x - (character.physicsBody.velocity.x * delta),
-                                 _startStation.position.y);
+    _physicsNode.position = ccp(_physicsNode.position.x - (_character.physicsBody.velocity.x * delta), _physicsNode.position.y);
     
     
     // loop the wave
@@ -194,43 +209,7 @@
         }
     }
     
-    _parallaxBackground.position = ccp(_parallaxBackground.position.x - (character.physicsBody.velocity.x * delta), _parallaxBackground.position.y);
-    
-    /*
-    // loop the waves
-    for (Wave *frontWave in _frontWaves) {
-        // get the world position of the bush
-        CGPoint waveWorldPosition = [_parallaxBackground convertToWorldSpace:frontWave.position];
-        // get the screen position of the bush
-        CGPoint waveScreenPosition = [self convertToNodeSpace:waveWorldPosition];
-        
-        // if the left corner is one complete width off the screen,
-        // move it to the right
-        if (waveScreenPosition.x <= (-1 * frontWave.contentSize.width)) {
-            for (CGPointObject *child in _parallaxBackground.parallaxArray) {
-                if (child.child == frontWave) {
-                    child.offset = ccp(child.offset.x + 2*frontWave.contentSize.width, child.offset.y);
-                }
-            }
-        }
-    }
-    for (Wave *rearWave in _rearWaves) {
-        // get the world position of the bush
-        CGPoint waveWorldPosition = [_parallaxBackground convertToWorldSpace:rearWave.position];
-        // get the screen position of the bush
-        CGPoint waveScreenPosition = [self convertToNodeSpace:waveWorldPosition];
-        
-        // if the left corner is one complete width off the screen,
-        // move it to the right
-        if (waveScreenPosition.x <= (-1 * rearWave.contentSize.width)) {
-            for (CGPointObject *child in _parallaxBackground.parallaxArray) {
-                if (child.child == rearWave) {
-                    child.offset = ccp(child.offset.x + 2*rearWave.contentSize.width, child.offset.y);
-                }
-            }
-        }
-    }*/
-    
+    _parallaxBackground.position = ccp(_parallaxBackground.position.x - (_character.physicsBody.velocity.x * delta), _parallaxBackground.position.y);
     
     
     // loop the clouds
@@ -253,11 +232,12 @@
     
     
     NSMutableArray *offScreenObstacles = nil;
+    NSMutableArray *offScreenWoods = nil;
     
     for (CCNode *obstacle in _obstacles) {
         CGPoint obstacleWorldPosition = [_physicsNode convertToWorldSpace:obstacle.position];
         CGPoint obstacleScreenPosition = [self convertToNodeSpace:obstacleWorldPosition];
-        if (obstacleScreenPosition.x < -obstacle.contentSize.width) {
+        if (obstacleScreenPosition.x < -50) {
             if (!offScreenObstacles) {
                 offScreenObstacles = [NSMutableArray array];
             }
@@ -266,16 +246,35 @@
     }
     
     for (CCNode *obstacleToRemove in offScreenObstacles) {
+        CCLOG(@"REMOVE");
         [obstacleToRemove removeFromParent];
         [_obstacles removeObject:obstacleToRemove];
     }
+    
+    for (CCNode *wood in _woods) {
+        CGPoint woodWorldPosition = [_physicsNode convertToWorldSpace:wood.position];
+        CGPoint woodScreenPosition = [self convertToNodeSpace:woodWorldPosition];
+        if (woodScreenPosition.x < -wood.contentSize.width) {
+            if (!offScreenWoods) {
+                offScreenWoods = [NSMutableArray array];
+            }
+            [offScreenWoods addObject:wood];
+        }
+    }
+    
+    for (CCNode *woodToRemove in offScreenWoods) {
+        CCLOG(@"REMOVE");
+        [woodToRemove removeFromParent];
+        [_woods removeObject:woodToRemove];
+    }
+    
     
     if (!_gameOver)
     {
         @try
         {
-            //character.physicsBody.velocity = ccp(80.f, clampf(character.physicsBody.velocity.y, -MAXFLOAT, 200.f));
-            character.physicsBody.velocity = ccp(100.f,0.f);
+            //character.physicsBody.velocity = ccp(10.f, clampf(character.physicsBody.velocity.y, -MAXFLOAT, 50.f));
+            _character.physicsBody.velocity = ccp(50.f,0.f);
             
             [super update:delta];
         }
@@ -286,18 +285,44 @@
     }
 }
 
--(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair character:(CCSprite*)character level:(CCNode*)level {
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair character:(CCSprite*)character wave:(CCNode*)wave {
+    CCLOG(@"DROWN");
+    [self gameOver];
+    return TRUE;
+}
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair character:(CCSprite*)character crash:(CCNode*)crash {
+    CCLOG(@"EATEN");
     [self gameOver];
     return TRUE;
 }
 
--(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair character:(CCNode *)character goal:(CCNode *)goal {
-    [goal removeFromParent];
-    distance+=50;
-    _scoreLabel.string = [NSString stringWithFormat:@"%d", distance];
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair character:(CCNode *)character wood:(CCNode *)wood {
+    CCLOG(@"SAFE");
+    //[goal removeFromParent];
+    _distance+=50;
+    _scoreLabel.string = [NSString stringWithFormat:@"%d", _distance];
+    return TRUE;
+}
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair wood:(CCNode *)wood crash:(CCNode*)crash {
+    CCLOG(@"Overlap");
+    [self woodEaten:wood];
     return TRUE;
 }
 
+- (void)woodEaten:(CCNode *)wood {
+    // load particle effect
+    CCParticleSystem *explosion = (CCParticleSystem *)[CCBReader load:@"WoodEaten"];
+    // place the particle effect on the wood position
+    explosion.position = wood.position;
+    // add the particle effect to the same node the wood is on
+    [wood.parent addChild:explosion];
+    // make the particle effect clean itself up, once it is completed
+    explosion.autoRemoveOnFinish = YES;
+    
+    // finally, remove the destroyed seal
+    [wood removeFromParent];
+    [_woods removeObject:wood];
+}
 
 @end
 

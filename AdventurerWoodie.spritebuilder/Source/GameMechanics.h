@@ -16,8 +16,8 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
     
     DrawingOrderRearWave,
     DrawingOrderHero,
-    DrawingOrderWood,
     DrawingOrderObstacles,
+    DrawingOrderWood,
     DrawingOrderFrontWave
 };
 
@@ -25,18 +25,19 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
 @interface GameMechanics : CCNode <CCPhysicsCollisionDelegate>
 {
     // define variables here;
-    WoodieWalkRight*    character;
-    Wave*               rearWave1;
-    Wave*               rearWave2;
-    WaveLightBlue*      frontWave1;
-    WaveLightBlue*      frontWave2;
+    WoodieWalkRight*    _character;
+    Wave*               _rearWave1;
+    Wave*               _rearWave2;
+    WaveLightBlue*      _frontWave1;
+    WaveLightBlue*      _frontWave2;
     CCPhysicsNode       *_physicsNode;
     CCNode              *_startStation;
-    float               timeSinceObstacle;
+    float               _timeSinceObstacle;
 }
 
 -(void) initialize;
 -(void) addObstacle;
+- (void)placeWood:(CGPoint)touchLocation;
 -(void) showScore;
 
 @end

@@ -13,7 +13,7 @@
 
 - (void)didLoadFromCCB {
     self.zOrder = DrawingOrderWood;
-    self.physicsBody.collisionType = @"goal";
+    self.physicsBody.collisionType = @"wood";
     self.physicsBody.sensor = YES;
 }
 

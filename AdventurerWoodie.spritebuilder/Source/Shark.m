@@ -13,13 +13,13 @@
 
 #define ARC4RANDOM_MAX      0x100000000
 
-static const CGFloat minimumXPosition = 50.f;
+static const CGFloat minimumXPosition = 100.f;
 
-static const CGFloat maximumXPosition = 500.f;
+static const CGFloat maximumXPosition = 850.f;
 
 - (void)didLoadFromCCB {
     self.zOrder = DrawingOrderObstacles;
-    //self.physicsBody.collisionType = @"level";
+    self.physicsBody.collisionType = @"crash";
     self.physicsBody.sensor = YES;
 }
 
