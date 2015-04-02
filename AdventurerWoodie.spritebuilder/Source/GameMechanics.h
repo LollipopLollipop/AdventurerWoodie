@@ -31,8 +31,14 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
     WaveLightBlue*      _frontWave1;
     WaveLightBlue*      _frontWave2;
     CCPhysicsNode       *_physicsNode;
+    CCPhysicsNode       *_staticPhyNode;
     CCNode              *_startStation;
+    CCNode              *_pullbackNode;
+    CCNode              *_bottomPullBack;
     float               _timeSinceObstacle;
+    CCNode              *_mouseJointNode;
+    CCPhysicsJoint      *_mouseJoint;
+    CCNode              *_readyWood;
 }
 
 -(void) initialize;

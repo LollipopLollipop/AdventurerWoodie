@@ -14,7 +14,7 @@
 - (void)initialize
 {
     _character = (WoodieWalkRight*)[CCBReader load:@"WoodieWalkRight"];
-    _character.position = ccp(_startStation.position.x-20, _startStation.position.y+80);
+    _character.position = ccp(_startStation.position.x-30, _startStation.position.y+80);
     //[_woodContainer addChild:character];
     _rearWave1 = (Wave*)[CCBReader load:@"Wave"];
     _rearWave1.position = ccp(85, 155);

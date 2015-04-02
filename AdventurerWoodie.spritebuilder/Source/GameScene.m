@@ -11,6 +11,7 @@
 #import "Shark.h"
 #import "Wood.h"
 #include <stdlib.h>
+#import "CCPhysics+ObjectiveChipmunk.h"
 
 @interface CGPointObject : NSObject
 {
@@ -27,9 +28,8 @@
 
 
 @implementation GameScene{
+    
     CGPoint _cloudParallaxRatio;
-    
-    
     CCNode *_parallaxContainer;
     CCParallaxNode *_parallaxBackground;
     
@@ -60,6 +60,9 @@
     [super initialize];
     
     self.userInteractionEnabled = TRUE;
+    _staticPhyNode.debugDraw = TRUE;
+    _physicsNode.debugDraw = TRUE;
+    
     
     _clouds = @[_cloud1, _cloud2];
     _frontWaves = @[_frontWave1, _frontWave2];
@@ -84,6 +87,11 @@
     _distance = 0;
     _scoreLabel.visible = true;
     
+    // nothing shall collide with our invisible nodes
+    _pullbackNode.physicsBody.collisionMask = @[];
+    _bottomPullBack.physicsBody.collisionMask = @[];
+    
+    
 }
 
 #pragma mark - Touch Handling
@@ -94,7 +102,18 @@
         
         @try
         {
-            [super touchBegan:touch withEvent:event];
+            //[super touchBegan:touch withEvent:event];
+            CGPoint touchLocation = [touch locationInNode:self];
+            
+            // start catapult dragging when a touch inside of the catapult arm occurs
+            if (CGRectContainsPoint([_readyWood boundingBox], touchLocation))
+            {
+                // move the mouseJointNode to the touch position
+                _mouseJointNode.position = touchLocation;
+                
+                // setup a spring joint between the mouseJointNode and the catapultArm
+                _mouseJoint = [CCPhysicsJoint connectedSpringJointWithBodyA:_mouseJointNode.physicsBody bodyB:_readyWood.physicsBody anchorA:ccp(0, 0) anchorB:ccp(29, 10) restLength:0.f stiffness:3000.f damping:150.f];
+            }
             
         }
         @catch(NSException* ex)
@@ -103,6 +122,35 @@
         }
     }
 }
+
+- (void)touchMoved:(CCTouch *)touch withEvent:(CCTouchEvent *)event
+{
+    // whenever touches move, update the position of the mouseJointNode to the touch position
+    CGPoint touchLocation = [touch locationInNode:self];
+    _mouseJointNode.position = touchLocation;
+}
+
+- (void)touchEnded:(CCTouch *)touch withEvent:(CCTouchEvent *)event {
+    CGPoint touchLocation = [touch locationInNode:self];
+    [self placeWood:touchLocation];
+    [self releaseReadyWood];
+}
+
+- (void)touchCancelled:(CCTouch *)touch withEvent:(CCTouchEvent *)event {
+    CGPoint touchLocation = [touch locationInNode:self];
+    [self placeWood:touchLocation];
+    [self releaseReadyWood];
+}
+
+- (void)releaseReadyWood {
+    if (_mouseJoint != nil) {
+        // releases the joint and lets the catpult snap back
+        [_mouseJoint invalidate];
+        _mouseJoint = nil;
+        _readyWood.position = ccp(50,180);
+    }
+}
+
 
 #pragma mark - Game Actions
 
