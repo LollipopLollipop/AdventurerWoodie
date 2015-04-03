@@ -19,7 +19,7 @@ static const CGFloat maximumXPosition = 850.f;
 
 - (void)didLoadFromCCB {
     self.zOrder = DrawingOrderObstacles;
-    self.physicsBody.collisionType = @"crash";
+    self.physicsBody.collisionType = @"shark";
     self.physicsBody.sensor = YES;
 }
 

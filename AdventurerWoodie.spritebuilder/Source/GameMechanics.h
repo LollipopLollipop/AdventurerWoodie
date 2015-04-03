@@ -19,6 +19,7 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
     DrawingOrderObstacles,
     DrawingOrderWood,
     DrawingOrderFrontWave
+    
 };
 
 
@@ -35,10 +36,14 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
     CCNode              *_startStation;
     CCNode              *_pullbackNode;
     CCNode              *_bottomPullBack;
+    CCNode              *_weaponPullbackNode;
+    CCNode              *_weaponBottomPullBack;
     float               _timeSinceObstacle;
     CCNode              *_mouseJointNode;
     CCPhysicsJoint      *_mouseJoint;
     CCNode              *_readyWood;
+    //Weapon              *_weapon;
+    CCNode              *_weapon;
 }
 
 -(void) initialize;

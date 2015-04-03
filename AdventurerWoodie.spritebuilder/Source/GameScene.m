@@ -12,6 +12,7 @@
 #import "Wood.h"
 #include <stdlib.h>
 #import "CCPhysics+ObjectiveChipmunk.h"
+#import "Weapon.h"
 
 @interface CGPointObject : NSObject
 {
@@ -51,6 +52,8 @@
     BOOL _gameOver;
     CCLabelTTF *_scoreLabel;
     int _distance;
+    BOOL dragWood;
+    BOOL dragWeapon;
 }
 
 
@@ -60,8 +63,8 @@
     [super initialize];
     
     self.userInteractionEnabled = TRUE;
-    _staticPhyNode.debugDraw = TRUE;
-    _physicsNode.debugDraw = TRUE;
+    //_staticPhyNode.debugDraw = TRUE;
+    //_physicsNode.debugDraw = TRUE;
     
     
     _clouds = @[_cloud1, _cloud2];
@@ -90,6 +93,8 @@
     // nothing shall collide with our invisible nodes
     _pullbackNode.physicsBody.collisionMask = @[];
     _bottomPullBack.physicsBody.collisionMask = @[];
+    _weaponPullbackNode.physicsBody.collisionMask = @[];
+    _weaponBottomPullBack.physicsBody.collisionMask = @[];
     
     
 }
@@ -108,11 +113,23 @@
             // start catapult dragging when a touch inside of the catapult arm occurs
             if (CGRectContainsPoint([_readyWood boundingBox], touchLocation))
             {
+                dragWood = TRUE;
+                CCLOG(@"DRAG WOOD");
                 // move the mouseJointNode to the touch position
                 _mouseJointNode.position = touchLocation;
                 
                 // setup a spring joint between the mouseJointNode and the catapultArm
                 _mouseJoint = [CCPhysicsJoint connectedSpringJointWithBodyA:_mouseJointNode.physicsBody bodyB:_readyWood.physicsBody anchorA:ccp(0, 0) anchorB:ccp(29, 10) restLength:0.f stiffness:3000.f damping:150.f];
+            }
+            else if (CGRectContainsPoint([_weapon boundingBox], touchLocation))
+            {
+                dragWeapon = TRUE;
+                CCLOG(@"DRAG WEAPON");
+                // move the mouseJointNode to the touch position
+                _mouseJointNode.position = touchLocation;
+                
+                // setup a spring joint between the mouseJointNode and the catapultArm
+                _mouseJoint = [CCPhysicsJoint connectedSpringJointWithBodyA:_mouseJointNode.physicsBody bodyB:_weapon.physicsBody anchorA:ccp(0, 0) anchorB:ccp(45.50, 54.50) restLength:0.f stiffness:3000.f damping:150.f];
             }
             
         }
@@ -131,15 +148,38 @@
 }
 
 - (void)touchEnded:(CCTouch *)touch withEvent:(CCTouchEvent *)event {
-    CGPoint touchLocation = [touch locationInNode:self];
-    [self placeWood:touchLocation];
-    [self releaseReadyWood];
+    
+    if(dragWood){
+        CCLOG(@"PLACE WOOD");
+        CGPoint touchLocation = [touch locationInNode:self];
+        [self placeWood:touchLocation];
+        [self releaseReadyWood];
+    }
+    if(dragWeapon){
+        CCLOG(@"MOVE WEAPON");
+        //_weapon.physicsBody.velocity =
+        //[_weapon.physicsBody applyImpulse:ccp(0, 400.f)];
+        [self applyWeapon];
+        [self releaseWeapon];
+    }
 }
 
 - (void)touchCancelled:(CCTouch *)touch withEvent:(CCTouchEvent *)event {
-    CGPoint touchLocation = [touch locationInNode:self];
-    [self placeWood:touchLocation];
-    [self releaseReadyWood];
+    if(dragWood){
+        CCLOG(@"PLACE WOOD");
+        CGPoint touchLocation = [touch locationInNode:self];
+        [self placeWood:touchLocation];
+        [self releaseReadyWood];
+    }
+    if(dragWeapon){
+        CCLOG(@"MOVE WEAPON");
+        //_weapon.physicsBody.velocity =
+        //[_weapon.physicsBody applyImpulse:ccp(0, 400.f)];
+        CGPoint launchDirection = ccp(0, 1);
+        CGPoint force = ccpMult(launchDirection, 8000);
+        [_weapon.physicsBody applyForce:force];
+        [self releaseWeapon];
+    }
 }
 
 - (void)releaseReadyWood {
@@ -148,6 +188,16 @@
         [_mouseJoint invalidate];
         _mouseJoint = nil;
         _readyWood.position = ccp(50,180);
+        dragWood = FALSE;
+    }
+}
+- (void)releaseWeapon {
+    if (_mouseJoint != nil) {
+        // releases the joint and lets the catpult snap back
+        [_mouseJoint invalidate];
+        _mouseJoint = nil;
+        _weapon.position = ccp(500,250);
+        dragWeapon = FALSE;
     }
 }
 
@@ -204,8 +254,19 @@
     [_physicsNode addChild:wood];
     [_woods addObject:wood];
 }
+#pragma mak - Weapon Applied
+- (void)applyWeapon
+{
+    CGPoint launchDirection = ccp(0, 1);
+    CGPoint force = ccpMult(launchDirection, 8000);
+    [_weapon.physicsBody applyForce:force];
+    CGPoint screenPosition = [self convertToWorldSpace:_weapon.position];
+    CGPoint worldPosition = [_physicsNode convertToNodeSpace:screenPosition];
+    Weapon* invisibleWeapon= (Weapon*)[CCBReader load:@"Weapon"];
+    invisibleWeapon.position = worldPosition;
+    [_physicsNode addChild:invisibleWeapon];
 
-
+}
 #pragma mark - Update
 
 - (void)showScore
@@ -322,7 +383,7 @@
         @try
         {
             //character.physicsBody.velocity = ccp(10.f, clampf(character.physicsBody.velocity.y, -MAXFLOAT, 50.f));
-            _character.physicsBody.velocity = ccp(50.f,0.f);
+            _character.physicsBody.velocity = ccp(0.f,0.f);
             
             [super update:delta];
         }
@@ -338,26 +399,32 @@
     [self gameOver];
     return TRUE;
 }
--(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair character:(CCSprite*)character crash:(CCNode*)crash {
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair character:(CCSprite*)character shark:(CCNode*)shark {
     CCLOG(@"EATEN");
     [self gameOver];
     return TRUE;
 }
 
--(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair character:(CCNode *)character wood:(CCNode *)wood {
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair character:(CCSprite*)character wood:(CCSprite *)wood {
     CCLOG(@"SAFE");
     //[goal removeFromParent];
     _distance+=50;
     _scoreLabel.string = [NSString stringWithFormat:@"%d", _distance];
     return TRUE;
 }
--(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair wood:(CCNode *)wood crash:(CCNode*)crash {
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair wood:(CCSprite *)wood shark:(CCNode*)shark {
     CCLOG(@"Overlap");
     [self woodEaten:wood];
     return TRUE;
 }
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair shark:(CCNode *)shark weapon:(CCSprite*)weapon {
+    CCLOG(@"Kill");
+    [weapon removeFromParent];
+    [self sharkKilled:shark];
+    return TRUE;
+}
 
-- (void)woodEaten:(CCNode *)wood {
+- (void)woodEaten:(CCSprite *)wood {
     // load particle effect
     CCParticleSystem *explosion = (CCParticleSystem *)[CCBReader load:@"WoodEaten"];
     // place the particle effect on the wood position
@@ -370,6 +437,20 @@
     // finally, remove the destroyed seal
     [wood removeFromParent];
     [_woods removeObject:wood];
+}
+- (void)sharkKilled:(CCNode *)shark {
+    // load particle effect
+    CCParticleSystem *explosion = (CCParticleSystem *)[CCBReader load:@"SharkKilled"];
+    // place the particle effect on the wood position
+    explosion.position = shark.position;
+    // add the particle effect to the same node the wood is on
+    [shark.parent addChild:explosion];
+    // make the particle effect clean itself up, once it is completed
+    explosion.autoRemoveOnFinish = YES;
+    
+    // finally, remove the destroyed seal
+    [shark removeFromParent];
+    [_obstacles removeObject:shark];
 }
 
 @end

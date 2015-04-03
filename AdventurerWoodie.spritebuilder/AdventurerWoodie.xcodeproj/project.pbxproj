@@ -99,6 +99,7 @@
 		F40E54BB1AC0B2EA00DFD577 /* WaveLightBlue.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E54BA1AC0B2EA00DFD577 /* WaveLightBlue.m */; };
 		F40E8C681ABDCF0B00566710 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E8C671ABDCF0B00566710 /* GameScene.m */; };
 		F40E8C6D1ABDCF7300566710 /* GameMechanics.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E8C6C1ABDCF7300566710 /* GameMechanics.m */; };
+		F4629CE01ACF44C70076B78E /* Weapon.m in Sources */ = {isa = PBXBuildFile; fileRef = F4629CDF1ACF44C70076B78E /* Weapon.m */; };
 		F4E051F11A9BDFE00013B488 /* Wood.m in Sources */ = {isa = PBXBuildFile; fileRef = F4E051F01A9BDFE00013B488 /* Wood.m */; };
 		F4E051FA1A9BEEED0013B488 /* WoodieWalkRight.m in Sources */ = {isa = PBXBuildFile; fileRef = F4E051F91A9BEEED0013B488 /* WoodieWalkRight.m */; };
 /* End PBXBuildFile section */
@@ -230,6 +231,8 @@
 		F40E8C671ABDCF0B00566710 /* GameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameScene.m; path = Source/GameScene.m; sourceTree = "<group>"; };
 		F40E8C6B1ABDCF7300566710 /* GameMechanics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameMechanics.h; path = Source/GameMechanics.h; sourceTree = "<group>"; };
 		F40E8C6C1ABDCF7300566710 /* GameMechanics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameMechanics.m; path = Source/GameMechanics.m; sourceTree = "<group>"; };
+		F4629CDE1ACF44C70076B78E /* Weapon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weapon.h; path = Source/Weapon.h; sourceTree = "<group>"; };
+		F4629CDF1ACF44C70076B78E /* Weapon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weapon.m; path = Source/Weapon.m; sourceTree = "<group>"; };
 		F4E051EF1A9BDFE00013B488 /* Wood.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wood.h; path = Source/Wood.h; sourceTree = "<group>"; };
 		F4E051F01A9BDFE00013B488 /* Wood.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Wood.m; path = Source/Wood.m; sourceTree = "<group>"; };
 		F4E051F81A9BEEED0013B488 /* WoodieWalkRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WoodieWalkRight.h; path = Source/WoodieWalkRight.h; sourceTree = "<group>"; };
@@ -463,6 +466,8 @@
 				D352B48019EC608A00829775 /* MetalShaders */,
 				F40E8C661ABDCF0B00566710 /* GameScene.h */,
 				F40E8C671ABDCF0B00566710 /* GameScene.m */,
+				F4629CDE1ACF44C70076B78E /* Weapon.h */,
+				F4629CDF1ACF44C70076B78E /* Weapon.m */,
 				F40E8C6B1ABDCF7300566710 /* GameMechanics.h */,
 				F40E8C6C1ABDCF7300566710 /* GameMechanics.m */,
 				F40E54B41AC0B2D700DFD577 /* Wave.h */,
@@ -853,6 +858,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4E051F11A9BDFE00013B488 /* Wood.m in Sources */,
+				F4629CE01ACF44C70076B78E /* Weapon.m in Sources */,
 				F40E54B61AC0B2D700DFD577 /* Wave.m in Sources */,
 				B73789871807631A0076A88C /* main.m in Sources */,
 				F40E54BB1AC0B2EA00DFD577 /* WaveLightBlue.m in Sources */,

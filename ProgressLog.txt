@@ -46,4 +46,7 @@ problems still exist:
 
 April 1:
 fix problems at Mar 27: 1, 2, 3
-implement enemy killing mechanism 
+implement enemy killing method and animation 
+TODO: 
+1: add level mechanism
+2: variable renaming (make them consistent)
