@@ -1,0 +1,49 @@
+Progress Log for AdventureWoodie starting from Mar 14:
+
+Mar 14:
+redesign project architecture 
+redeisgn game play scene (background, ocean wave, etc)
+task design for different levels
+detailize key game logic ideas 
+1: score calculation for different levels
+2: goals for different levels
+3: conditions for game over
+4: how the hero fights enemies 
+
+Mar 18:
+implement addObstacle (enemy spawning mechanism) functions to add sharks to waves randomly 
+add restart button everytime game over(still has bugs)
+problems still exist:
+1: object collisions are not properly detected
+2: waves are not properly looped
+TO DO: more detailed checking with moving the _physicsNode 
+
+Mar 23:
+re-examine FlappyBird projects hope to find why AdventureWoodie fails (both projects have moving physicsNode)
+fix bugs for moving physicsNode while the hero moves forward
+fix problems at Mar 18: 1,2
+TO DO: 
+1: add level mechanisms
+2: add enemy killing mechanisms
+problems still exist:
+1: restart button does not work
+2: why the hero crashes with waves even after setting it "not affected by gravity" and add no y-direction velocity?
+3: placeWood method does not place wood at accurate position 
+4: why placed woods keep disappearing before moving to the edge of the screen?
+5: sharks stop appearing after first couple of minutes
+6: how to create custom particle effects?
+refine game logic ideas 
+
+
+Mar 27:
+implement the dragWood method
+fix the collision problems between different objects 
+fix problems at Mar 23: 2,3,4,5
+problems still exist:
+1: space conversion 
+2: how to change readyWood?
+3: CCPhysicsSpringJoint add failure 
+
+April 1:
+fix problems at Mar 27: 1, 2, 3
+implement enemy killing mechanism 
