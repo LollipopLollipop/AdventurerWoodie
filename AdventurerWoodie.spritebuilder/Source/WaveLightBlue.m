@@ -12,8 +12,8 @@
 @implementation WaveLightBlue
 
 - (void)didLoadFromCCB {
-    self.zOrder = DrawingOrderFrontWave;
-    self.physicsBody.collisionType = @"wave";
+    self.zOrder = DrawingOrderFrontGround;
+    self.physicsBody.collisionType = @"ground";
     self.physicsBody.sensor = YES;
 }
 @end

@@ -12,8 +12,8 @@
 @implementation Wood
 
 - (void)didLoadFromCCB {
-    self.zOrder = DrawingOrderWood;
-    self.physicsBody.collisionType = @"wood";
+    self.zOrder = DrawingOrderTool;
+    self.physicsBody.collisionType = @"tool";
     self.physicsBody.sensor = YES;
 }
 

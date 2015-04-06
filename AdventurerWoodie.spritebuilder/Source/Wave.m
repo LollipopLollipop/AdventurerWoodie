@@ -11,8 +11,8 @@
 
 @implementation Wave
 - (void)didLoadFromCCB {
-    self.zOrder = DrawingOrderRearWave;
-    self.physicsBody.collisionType = @"wave";
+    self.zOrder = DrawingOrderRearGround;
+    self.physicsBody.collisionType = @"ground";
     self.physicsBody.sensor = YES;
 }
 @end

@@ -9,46 +9,22 @@
 #import "CCNode.h"
 #import "WoodieWalkRight.h"
 #import "Wave.h"
+#import "Wood.h"
 #import "WaveLightBlue.h"
 
 
+//specify drawing orders of different components at level scenes
 typedef NS_ENUM(NSInteger, DrawingOrder) {
     
-    DrawingOrderRearWave,
+    DrawingOrderRearGround,
+    DrawingOrderTool,
     DrawingOrderHero,
-    DrawingOrderObstacles,
-    DrawingOrderWood,
-    DrawingOrderFrontWave
+    DrawingOrderEnemy,
+    DrawingOrderWeapon,
+    DrawingOrderFrontGround
     
 };
 
 
 @interface GameMechanics : CCNode <CCPhysicsCollisionDelegate>
-{
-    // define variables here;
-    WoodieWalkRight*    _character;
-    Wave*               _rearWave1;
-    Wave*               _rearWave2;
-    WaveLightBlue*      _frontWave1;
-    WaveLightBlue*      _frontWave2;
-    CCPhysicsNode       *_physicsNode;
-    CCPhysicsNode       *_staticPhyNode;
-    CCNode              *_startStation;
-    CCNode              *_pullbackNode;
-    CCNode              *_bottomPullBack;
-    CCNode              *_weaponPullbackNode;
-    CCNode              *_weaponBottomPullBack;
-    float               _timeSinceObstacle;
-    CCNode              *_mouseJointNode;
-    CCPhysicsJoint      *_mouseJoint;
-    CCNode              *_readyWood;
-    //Weapon              *_weapon;
-    CCNode              *_weapon;
-}
-
--(void) initialize;
--(void) addObstacle;
-- (void)placeWood:(CGPoint)touchLocation;
--(void) showScore;
-
 @end

@@ -13,10 +13,11 @@
 @implementation WoodieWalkRight
 - (void)didLoadFromCCB
 {
-    self.scaleX = 0.2f;
-    self.scaleY = 0.2f;
+    //self.scaleX = 0.2f;
+    //self.scaleY = 0.2f;
     self.zOrder = DrawingOrderHero;
-    self.physicsBody.collisionType = @"character";
+    self.physicsBody.collisionType = @"hero";
+    //self.physicsBody.sensor = YES; //hero starts falling after turnning on
 }
 
 

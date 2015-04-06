@@ -1,12 +1,12 @@
 //
-//  GameScene.m
+//  Level1.m
 //  AdventurerWoodie
 //
-//  Created by Ding ZHAO on 3/21/15.
+//  Created by Ding ZHAO on 4/4/15.
 //  Copyright (c) 2015 Apportable. All rights reserved.
 //
 
-#import "GameScene.h"
+#import "Level1.h"
 #import "WoodieWalkRight.h"
 #import "Shark.h"
 #import "Wood.h"
@@ -28,44 +28,16 @@
 @end
 
 
-@implementation GameScene{
-    
-    CGPoint _cloudParallaxRatio;
-    CCNode *_parallaxContainer;
-    CCParallaxNode *_parallaxBackground;
-    
-    //background clouds
-    CCNode *_cloud1;
-    CCNode *_cloud2;
-    NSArray *_clouds;
-    //background waves
-    
-    NSArray *_frontWaves;
-    NSArray *_rearWaves;
-    
 
-    NSTimeInterval _sinceTouch;
-    //array of randomly placed obstacles (sharks in level 1)
-    NSMutableArray *_obstacles;
-    NSMutableArray *_woods;
-    CCButton *_restartButton;
-    BOOL _gameOver;
-    CCLabelTTF *_scoreLabel;
-    int _distance;
-    BOOL dragWood;
-    BOOL dragWeapon;
-}
+@implementation Level1
 
-
-// is called when CCB file has completed loading
 - (void)didLoadFromCCB {
-    CCLOG(@"call super init");
-    [super initialize];
-    
+    _startStation.zOrder = DrawingOrderTool;
+    _startStation.physicsBody.collisionType = @"station";
+    _timeSinceObstacle = 0.0f;
     self.userInteractionEnabled = TRUE;
     //_staticPhyNode.debugDraw = TRUE;
     //_physicsNode.debugDraw = TRUE;
-    
     
     _clouds = @[_cloud1, _cloud2];
     _frontWaves = @[_frontWave1, _frontWave2];
@@ -73,8 +45,7 @@
     
     _parallaxBackground = [CCParallaxNode node];
     [_parallaxContainer addChild:_parallaxBackground];
-    
-    
+
     _cloudParallaxRatio = ccp(0.5, 1);
     
     for (CCNode *cloud in _clouds) {
@@ -82,11 +53,13 @@
         [self removeChild:cloud];
         [_parallaxBackground addChild:cloud z:0 parallaxRatio:_cloudParallaxRatio positionOffset:offset];
     }
-        //The delegate object that you want to respond to collisions for the collision behavior.
+    
+    //The delegate object that you want to respond to collisions for the collision behavior.
     _physicsNode.collisionDelegate = self;
     
-    _obstacles = [NSMutableArray array];
-    _woods = [NSMutableArray array];
+    _enemies = [NSMutableArray array];
+    _tools = [NSMutableArray array];
+    _weapons = [NSMutableArray array];
     _distance = 0;
     _scoreLabel.visible = true;
     
@@ -95,8 +68,7 @@
     _bottomPullBack.physicsBody.collisionMask = @[];
     _weaponPullbackNode.physicsBody.collisionMask = @[];
     _weaponBottomPullBack.physicsBody.collisionMask = @[];
-    
-    
+    _prevWood = _startWood;
 }
 
 #pragma mark - Touch Handling
@@ -107,19 +79,17 @@
         
         @try
         {
-            //[super touchBegan:touch withEvent:event];
             CGPoint touchLocation = [touch locationInNode:self];
-            
-            // start catapult dragging when a touch inside of the catapult arm occurs
+            // start catapult dragging when a touch inside of the ready wood occurs
             if (CGRectContainsPoint([_readyWood boundingBox], touchLocation))
             {
-                dragWood = TRUE;
+                dragTool = TRUE;
                 CCLOG(@"DRAG WOOD");
                 // move the mouseJointNode to the touch position
                 _mouseJointNode.position = touchLocation;
                 
                 // setup a spring joint between the mouseJointNode and the catapultArm
-                _mouseJoint = [CCPhysicsJoint connectedSpringJointWithBodyA:_mouseJointNode.physicsBody bodyB:_readyWood.physicsBody anchorA:ccp(0, 0) anchorB:ccp(29, 10) restLength:0.f stiffness:3000.f damping:150.f];
+                _mouseJoint = [CCPhysicsJoint connectedSpringJointWithBodyA:_mouseJointNode.physicsBody bodyB:_readyWood.physicsBody anchorA:ccp(0, 0) anchorB:ccp(29, 10) restLength:0.f stiffness:5000.f damping:150.f];
             }
             else if (CGRectContainsPoint([_weapon boundingBox], touchLocation))
             {
@@ -149,11 +119,11 @@
 
 - (void)touchEnded:(CCTouch *)touch withEvent:(CCTouchEvent *)event {
     
-    if(dragWood){
+    if(dragTool){
         CCLOG(@"PLACE WOOD");
         CGPoint touchLocation = [touch locationInNode:self];
-        [self placeWood:touchLocation];
-        [self releaseReadyWood];
+        [self placeTool:touchLocation];
+        [self releaseTool];
     }
     if(dragWeapon){
         CCLOG(@"MOVE WEAPON");
@@ -165,30 +135,29 @@
 }
 
 - (void)touchCancelled:(CCTouch *)touch withEvent:(CCTouchEvent *)event {
-    if(dragWood){
+    if(dragTool){
         CCLOG(@"PLACE WOOD");
         CGPoint touchLocation = [touch locationInNode:self];
-        [self placeWood:touchLocation];
-        [self releaseReadyWood];
+        [self placeTool:touchLocation];
+        [self releaseTool];
     }
     if(dragWeapon){
         CCLOG(@"MOVE WEAPON");
         //_weapon.physicsBody.velocity =
         //[_weapon.physicsBody applyImpulse:ccp(0, 400.f)];
-        CGPoint launchDirection = ccp(0, 1);
-        CGPoint force = ccpMult(launchDirection, 8000);
-        [_weapon.physicsBody applyForce:force];
+        [self applyWeapon];
         [self releaseWeapon];
     }
-}
 
-- (void)releaseReadyWood {
+}
+#pragma mark - Release Dragged Obj
+- (void)releaseTool {
     if (_mouseJoint != nil) {
         // releases the joint and lets the catpult snap back
         [_mouseJoint invalidate];
         _mouseJoint = nil;
         _readyWood.position = ccp(50,180);
-        dragWood = FALSE;
+        dragTool = FALSE;
     }
 }
 - (void)releaseWeapon {
@@ -201,11 +170,52 @@
     }
 }
 
+#pragma mark - Apply Dragged Obj
+- (void)placeTool:(CGPoint)touchLocation
+{
+    CGPoint worldPosition = [self convertToWorldSpace:_readyWood.position];
+    CGPoint screenPosition = [_physicsNode convertToNodeSpace:worldPosition];
+    CCLOG(@"ready wood screen pos %f %f", screenPosition.x, screenPosition.y);
+    CCLOG(@"prev wood pos %f %f", _prevWood.position.x, _prevWood.position.y);
+    Wood* wood= (Wood*)[CCBReader load:@"Wood"];
+    if(CGRectContainsPoint([_prevWood boundingBox], screenPosition))
+    {
+        CCLOG(@"INSIDE BOUNDING BOX");
+        wood.position = ccp(_prevWood.position.x+58, _prevWood.position.y);
+        [_physicsNode addChild:wood];
+        [_tools addObject:wood];
+        _prevWood = wood;
+    }
+    else
+    {
+        CCLOG(@"NOT INSIDE BOUNDING BOX");
+        wood.position = screenPosition;
+        [_physicsNode addChild:wood];
+        [_tools addObject:wood];
+        CGPoint launchDirection = ccp(0, -1);
+        CGPoint force = ccpMult(launchDirection, 8000);
+        [wood.physicsBody applyForce:force];
+    }
+    
+}
+- (void)applyWeapon
+{
+    CGPoint launchDirection = ccp(0, -1);
+    CGPoint force = ccpMult(launchDirection, 8000);
+    [_weapon.physicsBody applyForce:force];
+    CGPoint worldPosition = [self convertToWorldSpace:_weapon.position];
+    CGPoint screenPosition = [_physicsNode convertToNodeSpace:worldPosition];
+    Weapon* invisibleWeapon= (Weapon*)[CCBReader load:@"Weapon"];
+    invisibleWeapon.position = screenPosition;
+    [_physicsNode addChild:invisibleWeapon];
+    [_weapons addObject:invisibleWeapon];
+}
 
 #pragma mark - Game Actions
 
 - (void)gameOver {
     if (!_gameOver) {
+        CCLOG(@"GAME OVER");
         _gameOver = TRUE;
         _restartButton.visible = TRUE;
         //comes with FB check later
@@ -213,60 +223,39 @@
         _character.physicsBody.allowsRotation = FALSE;
         [_character stopAllActions];
         
+        /*
         CCActionMoveBy *moveBy = [CCActionMoveBy actionWithDuration:0.2f position:ccp(-2, 2)];
         CCActionInterval *reverseMovement = [moveBy reverse];
         CCActionSequence *shakeSequence = [CCActionSequence actionWithArray:@[moveBy, reverseMovement]];
         CCActionEaseBounce *bounce = [CCActionEaseBounce actionWithAction:shakeSequence];
         
-        [self runAction:bounce];
+        [self runAction:bounce];*/
     }
 }
 
 - (void)restart {
-    CCScene *scene = [CCBReader loadAsScene:@"GameScene"];
+    CCScene *scene = [CCBReader loadAsScene:@"Level1"];
     [[CCDirector sharedDirector] replaceScene:scene];
+    //CCTransition *transition = [CCTransition transitionFadeWithDuration:0.8f];
+    //[[CCDirector sharedDirector] presentScene:scene withTransition:transition];
     
 }
 
 #pragma mark - Obstacle Spawning
-- (void)addObstacle
+- (void)addEnemy
 {
     Shark *shark = (Shark *)[CCBReader load:@"Shark"];
     
-    CGPoint screenPosition = [self convertToWorldSpace:ccp(0, 0)];//y position is fixed at 0
-    CGPoint worldPosition = [_physicsNode convertToNodeSpace:screenPosition];
+    CGPoint worldPosition = [self convertToWorldSpace:ccp(0, 10)];//y position is fixed at 0
+    CGPoint screenPosition = [_physicsNode convertToNodeSpace:worldPosition];
     
-    shark.position = worldPosition;
+    shark.position = screenPosition;
     [shark setupRandomPosition];
     [_physicsNode addChild:shark];
-    [_obstacles addObject:shark];
+    [_enemies addObject:shark];
 }
 
-#pragma mak - Wood Placement
-- (void)placeWood:(CGPoint)touchLocation
-{
-    CGPoint screenPosition = [self convertToWorldSpace:touchLocation];
-    CGPoint worldPosition = [_physicsNode convertToNodeSpace:screenPosition];
-    //place the wood on the touch location
-    Wood* wood= (Wood*)[CCBReader load:@"Wood"];
-    wood.position = worldPosition;
-    //add new wood to the parent physics node
-    [_physicsNode addChild:wood];
-    [_woods addObject:wood];
-}
-#pragma mak - Weapon Applied
-- (void)applyWeapon
-{
-    CGPoint launchDirection = ccp(0, 1);
-    CGPoint force = ccpMult(launchDirection, 8000);
-    [_weapon.physicsBody applyForce:force];
-    CGPoint screenPosition = [self convertToWorldSpace:_weapon.position];
-    CGPoint worldPosition = [_physicsNode convertToNodeSpace:screenPosition];
-    Weapon* invisibleWeapon= (Weapon*)[CCBReader load:@"Weapon"];
-    invisibleWeapon.position = worldPosition;
-    [_physicsNode addChild:invisibleWeapon];
 
-}
 #pragma mark - Update
 
 - (void)showScore
@@ -279,17 +268,8 @@
 - (void)update:(CCTime)delta
 {
     _sinceTouch += delta;
-    
-    /*character.rotation = clampf(character.rotation, -30.f, 90.f);
-    
-    if (character.physicsBody.allowsRotation) {
-        float angularVelocity = clampf(character.physicsBody.angularVelocity, -2.f, 1.f);
-        character.physicsBody.angularVelocity = angularVelocity;
-    }
-    
-    if ((_sinceTouch > 0.5f)) {
-        [character.physicsBody applyAngularImpulse:-40000.f*delta];
-    }*/
+    _distance+=delta*_character.physicsBody.velocity.x;
+    _scoreLabel.string = [NSString stringWithFormat:@"%d", _distance];
     
     _physicsNode.position = ccp(_physicsNode.position.x - (_character.physicsBody.velocity.x * delta), _physicsNode.position.y);
     
@@ -339,53 +319,81 @@
         }
     }
     
+    //remove created objects
+    NSMutableArray *offScreenEnemies = nil;
+    NSMutableArray *offScreenTools = nil;
+    NSMutableArray *offScreenWeapons = nil;
     
-    NSMutableArray *offScreenObstacles = nil;
-    NSMutableArray *offScreenWoods = nil;
-    
-    for (CCNode *obstacle in _obstacles) {
-        CGPoint obstacleWorldPosition = [_physicsNode convertToWorldSpace:obstacle.position];
-        CGPoint obstacleScreenPosition = [self convertToNodeSpace:obstacleWorldPosition];
-        if (obstacleScreenPosition.x < -50) {
-            if (!offScreenObstacles) {
-                offScreenObstacles = [NSMutableArray array];
+    for (CCNode *enemy in _enemies) {
+        CGPoint enemyWorldPosition = [_physicsNode convertToWorldSpace:enemy.position];
+        CGPoint enemyScreenPosition = [self convertToNodeSpace:enemyWorldPosition];
+        if (enemyScreenPosition.x < -50) {
+            if (!offScreenEnemies) {
+                offScreenEnemies = [NSMutableArray array];
             }
-            [offScreenObstacles addObject:obstacle];
+            [offScreenEnemies addObject:enemy];
         }
     }
     
-    for (CCNode *obstacleToRemove in offScreenObstacles) {
+    for (CCNode *enemyToRemove in offScreenEnemies) {
         CCLOG(@"REMOVE");
-        [obstacleToRemove removeFromParent];
-        [_obstacles removeObject:obstacleToRemove];
+        [enemyToRemove removeFromParent];
+        [_enemies removeObject:enemyToRemove];
     }
     
-    for (CCNode *wood in _woods) {
-        CGPoint woodWorldPosition = [_physicsNode convertToWorldSpace:wood.position];
-        CGPoint woodScreenPosition = [self convertToNodeSpace:woodWorldPosition];
-        if (woodScreenPosition.x < -wood.contentSize.width) {
-            if (!offScreenWoods) {
-                offScreenWoods = [NSMutableArray array];
+    for (CCNode *tool in _tools) {
+        CGPoint toolWorldPosition = [_physicsNode convertToWorldSpace:tool.position];
+        CGPoint toolScreenPosition = [self convertToNodeSpace:toolWorldPosition];
+        if (toolScreenPosition.x < -tool.contentSize.width) {
+            if (!offScreenTools) {
+                offScreenTools = [NSMutableArray array];
             }
-            [offScreenWoods addObject:wood];
+            [offScreenTools addObject:tool];
         }
     }
     
-    for (CCNode *woodToRemove in offScreenWoods) {
+    for (CCNode *toolToRemove in offScreenTools) {
         CCLOG(@"REMOVE");
-        [woodToRemove removeFromParent];
-        [_woods removeObject:woodToRemove];
+        [toolToRemove removeFromParent];
+        [_tools removeObject:toolToRemove];
+    }
+    
+    for (CCNode *weapon in _weapons) {
+        CGPoint weaponWorldPosition = [_physicsNode convertToWorldSpace:weapon.position];
+        CGPoint weaponScreenPosition = [self convertToNodeSpace:weaponWorldPosition];
+        if (weaponScreenPosition.x < -weapon.contentSize.width) {
+            if (!offScreenWeapons) {
+                offScreenWeapons = [NSMutableArray array];
+            }
+            [offScreenWeapons addObject:weapon];
+        }
+    }
+    
+    for (CCNode *weaponToRemove in offScreenWeapons) {
+        CCLOG(@"REMOVE");
+        [weaponToRemove removeFromParent];
+        [_weapons removeObject:weaponToRemove];
     }
     
     
     if (!_gameOver)
     {
+        CCLOG(@"NOT GAME OVER");
         @try
         {
-            //character.physicsBody.velocity = ccp(10.f, clampf(character.physicsBody.velocity.y, -MAXFLOAT, 50.f));
-            _character.physicsBody.velocity = ccp(0.f,0.f);
+            _character.physicsBody.velocity = ccp(10.f, 0.f);
+            //Increment the time since the last obstacle was added
+            _timeSinceObstacle += delta;
             
-            [super update:delta];
+            //Check to see if two seconds have passed
+            if (_timeSinceObstacle > 10.0f)
+            {
+                //Add a new enemy
+                [self addEnemy];
+                //Then reset the timer
+                _timeSinceObstacle = 0.0f;
+                
+            }
         }
         @catch(NSException* ex)
         {
@@ -394,37 +402,37 @@
     }
 }
 
--(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair character:(CCSprite*)character wave:(CCNode*)wave {
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair hero:(CCSprite*)hero ground:(CCNode*)ground {
     CCLOG(@"DROWN");
+    //implement drowning effect
     [self gameOver];
     return TRUE;
 }
--(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair character:(CCSprite*)character shark:(CCNode*)shark {
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair hero:(CCSprite*)hero enemy:(CCNode*)enemy {
     CCLOG(@"EATEN");
+    //implement effect of killed by enemies
     [self gameOver];
     return TRUE;
 }
 
--(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair character:(CCSprite*)character wood:(CCSprite *)wood {
-    CCLOG(@"SAFE");
-    //[goal removeFromParent];
-    _distance+=50;
-    _scoreLabel.string = [NSString stringWithFormat:@"%d", _distance];
-    return TRUE;
-}
--(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair wood:(CCSprite *)wood shark:(CCNode*)shark {
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair tool:(CCSprite *)tool enemy:(CCNode*)enemy {
     CCLOG(@"Overlap");
-    [self woodEaten:wood];
+    
+    [self toolDestroyed:tool];
     return TRUE;
 }
--(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair shark:(CCNode *)shark weapon:(CCSprite*)weapon {
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair enemy:(CCNode *)enemy weapon:(CCSprite*)weapon {
     CCLOG(@"Kill");
-    [weapon removeFromParent];
-    [self sharkKilled:shark];
+    [self enemyKilled:enemy];
+    return TRUE;
+}
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair enemy:(CCNode *)enemy station:(CCNode*)station {
+    CCLOG(@"Kill");
+    [self enemyKilled:enemy];
     return TRUE;
 }
 
-- (void)woodEaten:(CCSprite *)wood {
+- (void)toolDestroyed:(CCSprite *)wood {
     // load particle effect
     CCParticleSystem *explosion = (CCParticleSystem *)[CCBReader load:@"WoodEaten"];
     // place the particle effect on the wood position
@@ -436,9 +444,9 @@
     
     // finally, remove the destroyed seal
     [wood removeFromParent];
-    [_woods removeObject:wood];
+    [_tools removeObject:wood];
 }
-- (void)sharkKilled:(CCNode *)shark {
+- (void)enemyKilled:(CCNode *)shark {
     // load particle effect
     CCParticleSystem *explosion = (CCParticleSystem *)[CCBReader load:@"SharkKilled"];
     // place the particle effect on the wood position
@@ -450,8 +458,7 @@
     
     // finally, remove the destroyed seal
     [shark removeFromParent];
-    [_obstacles removeObject:shark];
+    [_enemies removeObject:shark];
 }
 
 @end
-
