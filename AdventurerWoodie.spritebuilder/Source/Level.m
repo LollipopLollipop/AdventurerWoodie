@@ -1,13 +1,13 @@
 //
-//  Wave.h
+//  Level.m
 //  AdventurerWoodie
 //
-//  Created by Ding ZHAO on 3/23/15.
+//  Created by Ding ZHAO on 4/6/15.
 //  Copyright (c) 2015 Apportable. All rights reserved.
 //
 
-#import "CCNode.h"
+#import "Level.h"
 
-@interface Wave : CCNode
+@implementation Level
 
 @end

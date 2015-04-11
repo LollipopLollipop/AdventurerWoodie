@@ -7,10 +7,9 @@
 //
 
 #import "CCNode.h"
-#import "WoodieWalkRight.h"
-#import "Wave.h"
 #import "Wood.h"
-#import "WaveLightBlue.h"
+#import "Level.h"
+#import "LevelSetting.h"
 
 
 //specify drawing orders of different components at level scenes
@@ -27,4 +26,16 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
 
 
 @interface GameMechanics : CCNode <CCPhysicsCollisionDelegate>
+
+- (void)placeTool;//abstract
+- (void)releaseTool;
+- (void)applyWeapon;
+- (void)releaseWeapon;
+- (void)gameOver;
+- (void)restart;
+- (void)showScore;
+- (void)addEnemy;
+- (void)toolDestroyed:(CCSprite *)tool;
+- (void)enemyKilled:(CCNode *)enemy;
+- (void)loadNextLevel;
 @end

@@ -19,7 +19,10 @@ static const CGFloat maximumXPosition = 850.f;
 
 - (void)didLoadFromCCB {
     self.zOrder = DrawingOrderEnemy;
-    self.physicsBody.collisionType = @"enemy";
+    //self.physicsBody.collisionType = @"enemy";
+    //self.physicsBody.collisionCategories = @[@"enemy"];
+    //self.physicsBody.collisionMask = @[@"weapon"];
+    
     self.physicsBody.sensor = YES;
 }
 

@@ -13,7 +13,9 @@
 
 - (void)didLoadFromCCB {
     self.zOrder = DrawingOrderTool;
-    self.physicsBody.collisionType = @"tool";
+    //self.physicsBody.collisionType = @"tool";
+    //self.physicsBody.collisionCategories = @[@"tool"];
+    //self.physicsBody.collisionMask = @[@"hero", @"enemy"];
     self.physicsBody.sensor = YES;
 }
 
