@@ -25,6 +25,7 @@ static int levelSpeed = 0;
     CCSprite            *_character;
     CCPhysicsNode       *_staticPhyNode;
     CCPhysicsNode       *_movingNode;
+    CCNode              *_enemiesNode;
     CCNode              *_settingNode;
     CCNode              *_startStation;
     CCNode              *_startTool;
@@ -53,15 +54,16 @@ static int levelSpeed = 0;
     
     NSTimeInterval      _sinceTouch;
     NSMutableArray      *_enemies;
+    //array of tools used to build the road for Woodie
     NSMutableArray      *_tools;
     NSMutableArray      *_weapons;
     BOOL                _gameOver;
     BOOL                _danger;
     int                 _distance;
+    int                 _toolCount;
     BOOL                dragTool;
     BOOL                dragWeapon;
     float               _timeSinceEnemy;
-    float               _timeSinceSafeStep;
     Level               *_loadedLevel;
     LevelSetting        *_loadedLevelSetting;
 
@@ -75,21 +77,21 @@ static int levelSpeed = 0;
     //_staticPhyNode.collisionDelegate = self;
     _movingNode.collisionDelegate = self;
     
-    //_rearGround1.zOrder = DrawingOrderRearGround;
-    //_rearGround2.zOrder = DrawingOrderRearGround;
-    //_startStation.zOrder = DrawingOrderTool;
-    //_character.zOrder = DrawingOrderHero;
-    //_weapon.zOrder = DrawingOrderWeapon;
-    //_frontGround1.zOrder = DrawingOrderFrontGround;
-    //_frontGround2.zOrder = DrawingOrderFrontGround;
-    
-    
     
     
     _loadedLevel = (Level *) [CCBReader load:selectedLevel owner:self];
     [_movingNode addChild:_loadedLevel];
     _loadedLevelSetting = (LevelSetting *) [CCBReader load:selectedLevelSetting owner:self];
     [_settingNode addChild:_loadedLevelSetting];
+    /*
+    _rearGround1.zOrder = DrawingOrderRearGround;
+    _rearGround2.zOrder = DrawingOrderRearGround;
+    _startStation.zOrder = DrawingOrderTool;
+    _character.zOrder = DrawingOrderHero;
+    _weapon.zOrder = DrawingOrderWeapon;
+    _frontGround1.zOrder = DrawingOrderFrontGround;
+    _frontGround2.zOrder = DrawingOrderFrontGround;
+     */
     
     levelSpeed = _loadedLevel.levelSpeed;
     
@@ -101,7 +103,6 @@ static int levelSpeed = 0;
     _rearGround2.physicsBody.collisionType = @"ground";
     _weapon.physicsBody.collisionType = @"weapon";*/
     _timeSinceEnemy = 0.0f;
-    _timeSinceSafeStep = 0.0f;
     //_staticPhyNode.debugDraw = TRUE;
     //_physicsNode.debugDraw = TRUE;
     _clouds = @[_cloud1, _cloud2];
@@ -111,6 +112,7 @@ static int levelSpeed = 0;
     _tools = [NSMutableArray array];
     _weapons = [NSMutableArray array];
     _distance = 0;
+    _toolCount = 0;
     _scoreLabel.visible = true;
     
     // nothing shall collide with our invisible nodes
@@ -250,7 +252,7 @@ static int levelSpeed = 0;
         wood.position = screenPosition;
         [_movingNode addChild:wood];
         //[_staticPhyNode addChild:wood];
-        [_tools addObject:wood];
+        //[_tools addObject:wood];
         CGPoint launchDirection = ccp(0, -1);
         CGPoint force = ccpMult(launchDirection, 8000);
         [wood.physicsBody applyForce:force];
@@ -281,7 +283,8 @@ static int levelSpeed = 0;
     
     shark.position = screenPosition;
     [shark setupRandomPosition];
-    [_movingNode addChild:shark];
+    [_enemiesNode addChild:shark];
+    //[_movingNode addChild:shark];
     [_enemies addObject:shark];
     //CCLOG(@"ADD SHARK");
     //CCLOG(@"ENEMIES COUNT %lu", [_enemies count]);
@@ -314,9 +317,16 @@ static int levelSpeed = 0;
 - (void) getInDanger {
     if(!_danger) {
         _danger = TRUE;
+        _character.physicsBody.allowsRotation = TRUE;
+        _character.physicsBody.affectedByGravity = TRUE;
         _character.physicsBody.velocity = ccp(0.0f, 0.0f);
-        _character.physicsBody.allowsRotation = FALSE;
-        [_character stopAllActions];
+        //_character.rotation = 90.f;
+        //_character.physicsBody.allowsRotation = FALSE;
+        //_character.physicsBody.allowsRotation = FALSE;
+        //[_character stopAllActions];
+        //CGPoint launchDirection = ccp(0, -1);
+        //CGPoint force = ccpMult(launchDirection, 400);
+        //[_character.physicsBody applyForce:force];
         CCLOG(@"DANGER");
     }
 }
@@ -448,8 +458,8 @@ static int levelSpeed = 0;
         [_weapons removeObject:weaponToRemove];
     }
     
-    _timeSinceSafeStep += delta;
-    if(_timeSinceSafeStep > 6.0f)
+    
+    if(_character.position.x > (_prevTool.position.x + _prevTool.contentSize.width/2 + (_character.contentSize.width*_character.scaleX)/2))
     {
         //CCLOG(@"EXCEEDS 6");
         //hero drops into sea water if not step onto tool
@@ -463,16 +473,16 @@ static int levelSpeed = 0;
     
     if (!_gameOver && !_danger)
     {
-        CCLOG(@"NOT GAME OVER and NO DANGER");
+        //CCLOG(@"NOT GAME OVER and NO DANGER");
         @try
         {
-            _character.physicsBody.velocity = ccp(levelSpeed, 2.f);
+            _character.physicsBody.velocity = ccp(levelSpeed, 0);
             //Increment the time since the last obstacle was added
             _timeSinceEnemy += delta;
             
             //CCLOG(@"time since safe step is %f", _timeSinceSafeStep);
             //Check to see if two seconds have passed
-            if (_timeSinceEnemy > 2.0f)
+            if (_timeSinceEnemy > 10.0f)
             {
                 //Add a new enemy
                 [self addEnemy];
@@ -491,6 +501,7 @@ static int levelSpeed = 0;
 
 -(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair hero:(CCSprite*)hero ground:(CCNode*)ground {
     CCLOG(@"DROWN");
+    [self gameOver];
     [self woodieDrown:hero];
     return TRUE;
 }
@@ -517,9 +528,15 @@ static int levelSpeed = 0;
     return TRUE;
 }
 -(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair hero:(CCSprite *)hero tool:(CCSprite*)tool {
-    CCLOG(@"SAFE");
+    _toolCount += 1;
+    CCLOG(@"SAFE %d", _toolCount);
     //[self showScore];
-    _timeSinceSafeStep = 0.0f;
+    return TRUE;
+}
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair ground:(CCNode*)ground tool:(CCSprite*)tool {
+    CCLOG(@"CLEAR FLOATING TOOL");
+    [tool removeFromParent];
+    //[self showScore];
     return TRUE;
 }
     
@@ -527,16 +544,17 @@ static int levelSpeed = 0;
 - (void)toolDestroyed:(CCSprite *)tool {
     // load particle effect
     CCParticleSystem *explosion = (CCParticleSystem *)[CCBReader load:@"WoodEaten"];
-    // place the particle effect on the wood position
+    // place the particle effect on the tool position
     explosion.position = tool.position;
-    // add the particle effect to the same node the wood is on
+    // add the particle effect to the same node the tool is on
     [tool.parent addChild:explosion];
     // make the particle effect clean itself up, once it is completed
     explosion.autoRemoveOnFinish = YES;
-    
-    // finally, remove the destroyed seal
     [tool removeFromParent];
-    [_tools removeObject:tool];
+    
+    //#############!!!!!!!!!!!!!!!!!!@@@@@@@@@@@@@@@@@@
+    //different strategies for tools in or not in _tools!!!!!!!!!!!!!!!!!
+    
 }
 - (void)enemyKilled:(CCNode *)enemy {
     // load particle effect

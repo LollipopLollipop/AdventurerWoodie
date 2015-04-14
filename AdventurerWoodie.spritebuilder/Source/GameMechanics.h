@@ -18,8 +18,8 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
     DrawingOrderRearGround,
     DrawingOrderTool,
     DrawingOrderHero,
-    DrawingOrderEnemy,
     DrawingOrderWeapon,
+    DrawingOrderEnemy,
     DrawingOrderFrontGround
     
 };

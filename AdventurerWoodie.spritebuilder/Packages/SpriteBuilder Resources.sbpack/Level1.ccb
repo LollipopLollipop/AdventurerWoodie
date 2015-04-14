@@ -10,7 +10,7 @@
 		<false/>
 	</dict>
 	<key>UUID</key>
-	<integer>141</integer>
+	<integer>142</integer>
 	<key>centeredOrigin</key>
 	<false/>
 	<key>currentResolution</key>
@@ -85,16 +85,16 @@
 					<key>points</key>
 					<array>
 						<array>
-							<real>-0.18359375</real>
-							<real>-167.15625</real>
+							<real>0.80078125</real>
+							<real>-170.01953125</real>
 						</array>
 						<array>
-							<real>-0.859375</real>
-							<real>-123.55078125</real>
+							<real>0.4296875</real>
+							<real>-142.2890625</real>
 						</array>
 						<array>
-							<real>959.54296875</real>
-							<real>-124.18359375</real>
+							<real>960.94921875</real>
+							<real>-147.4375</real>
 						</array>
 						<array>
 							<real>960.16796875</real>
@@ -109,16 +109,16 @@
 								<real>-168.83984375</real>
 							</array>
 							<array>
-								<real>959.54296875</real>
-								<real>-124.18359375</real>
+								<real>960.94921875</real>
+								<real>-147.4375</real>
 							</array>
 							<array>
-								<real>-0.859375</real>
-								<real>-123.55078125</real>
+								<real>0.4296875</real>
+								<real>-142.2890625</real>
 							</array>
 							<array>
-								<real>-0.18359375</real>
-								<real>-167.15625</real>
+								<real>0.80078125</real>
+								<real>-170.01953125</real>
 							</array>
 						</array>
 					</array>
@@ -220,12 +220,16 @@
 							<real>-169.17578125</real>
 						</array>
 						<array>
-							<real>-1.1328125</real>
-							<real>-121.71875</real>
+							<real>-1.203125</real>
+							<real>-145.10546875</real>
 						</array>
 						<array>
-							<real>959.46484375</real>
-							<real>-122.69921875</real>
+							<real>-1.16015625</real>
+							<real>-146.01953125</real>
+						</array>
+						<array>
+							<real>960.21484375</real>
+							<real>-144.96484375</real>
 						</array>
 						<array>
 							<real>959.55078125</real>
@@ -236,20 +240,20 @@
 					<array>
 						<array>
 							<array>
-								<real>959.55078125</real>
-								<real>-169.73046875</real>
-							</array>
-							<array>
-								<real>959.46484375</real>
-								<real>-122.69921875</real>
-							</array>
-							<array>
-								<real>-1.1328125</real>
-								<real>-121.71875</real>
+								<real>-1.203125</real>
+								<real>-145.10546875</real>
 							</array>
 							<array>
 								<real>-0.953125</real>
 								<real>-169.17578125</real>
+							</array>
+							<array>
+								<real>959.55078125</real>
+								<real>-169.73046875</real>
+							</array>
+							<array>
+								<real>960.21484375</real>
+								<real>-144.96484375</real>
 							</array>
 						</array>
 					</array>
@@ -300,8 +304,6 @@
 						<string>Wave.ccb</string>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -679,9 +681,9 @@
 				<key>physicsBody</key>
 				<dict>
 					<key>affectedByGravity</key>
-					<true/>
+					<false/>
 					<key>allowsRotation</key>
-					<true/>
+					<false/>
 					<key>bodyShape</key>
 					<integer>0</integer>
 					<key>collisionCategories</key>
@@ -793,6 +795,86 @@
 						<string>WoodieWalkRight.ccb</string>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
+			</dict>
+			<dict>
+				<key>UUID</key>
+				<integer>141</integer>
+				<key>baseClass</key>
+				<string>CCNode</string>
+				<key>children</key>
+				<array/>
+				<key>customClass</key>
+				<string></string>
+				<key>displayName</key>
+				<string>CCNode</string>
+				<key>memberVarAssignmentName</key>
+				<string>_enemiesNode</string>
+				<key>memberVarAssignmentType</key>
+				<integer>2</integer>
+				<key>properties</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>name</string>
+						<key>type</key>
+						<string>StringSimple</string>
+						<key>value</key>
+						<string></string>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>position</string>
+						<key>type</key>
+						<string>Position</string>
+						<key>value</key>
+						<array>
+							<real>0.0</real>
+							<real>0.0</real>
+							<integer>0</integer>
+							<integer>0</integer>
+							<integer>0</integer>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>contentSize</string>
+						<key>type</key>
+						<string>Size</string>
+						<key>value</key>
+						<array>
+							<real>0.0</real>
+							<real>0.0</real>
+							<integer>0</integer>
+							<integer>0</integer>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>anchorPoint</string>
+						<key>type</key>
+						<string>Point</string>
+						<key>value</key>
+						<array>
+							<real>0.0</real>
+							<real>0.0</real>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>scale</string>
+						<key>type</key>
+						<string>ScaleLock</string>
+						<key>value</key>
+						<array>
+							<real>1</real>
+							<real>1</real>
+							<false/>
+							<integer>0</integer>
+						</array>
+					</dict>
+				</array>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -844,12 +926,12 @@
 							<real>-168.14453125</real>
 						</array>
 						<array>
-							<real>1.12890625</real>
-							<real>-132.2578125</real>
+							<real>0.35546875</real>
+							<real>-147.1328125</real>
 						</array>
 						<array>
-							<real>960.69140625</real>
-							<real>-138.5625</real>
+							<real>961.421875</real>
+							<real>-147.57421875</real>
 						</array>
 						<array>
 							<real>961.76171875</real>
@@ -864,12 +946,12 @@
 								<real>-168.90234375</real>
 							</array>
 							<array>
-								<real>960.69140625</real>
-								<real>-138.5625</real>
+								<real>961.421875</real>
+								<real>-147.57421875</real>
 							</array>
 							<array>
-								<real>1.12890625</real>
-								<real>-132.2578125</real>
+								<real>0.35546875</real>
+								<real>-147.1328125</real>
 							</array>
 							<array>
 								<real>0.5390625</real>
@@ -975,12 +1057,12 @@
 							<real>-169.02734375</real>
 						</array>
 						<array>
-							<real>-1.75</real>
-							<real>-132.171875</real>
+							<real>-1.7226409912109375</real>
+							<real>-149.9375</real>
 						</array>
 						<array>
-							<real>960.05859375</real>
-							<real>-132.84765625</real>
+							<real>961.21484375</real>
+							<real>-147.0078125</real>
 						</array>
 						<array>
 							<real>960.7421875</real>
@@ -995,12 +1077,12 @@
 								<real>-169.7109375</real>
 							</array>
 							<array>
-								<real>960.05859375</real>
-								<real>-132.84765625</real>
+								<real>961.21484375</real>
+								<real>-147.0078125</real>
 							</array>
 							<array>
-								<real>-1.75</real>
-								<real>-132.171875</real>
+								<real>-1.7226409912109375</real>
+								<real>-149.9375</real>
 							</array>
 							<array>
 								<real>-2.0586090087890625</real>
