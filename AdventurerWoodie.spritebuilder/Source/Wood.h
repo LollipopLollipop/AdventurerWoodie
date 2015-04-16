@@ -10,5 +10,5 @@
 #import "CCNode.h"
 
 @interface Wood : CCSprite
-
+- (void)setupRandomPosition;
 @end

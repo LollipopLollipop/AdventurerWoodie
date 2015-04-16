@@ -15,10 +15,9 @@
 
 static const CGFloat minimumXPosition = 100.f;
 
-static const CGFloat maximumXPosition = 850.f;
+static const CGFloat maximumXPosition = 450.f;
 
 - (void)didLoadFromCCB {
-    self.zOrder = DrawingOrderEnemy;
     //self.physicsBody.collisionType = @"enemy";
     //self.physicsBody.collisionCategories = @[@"enemy"];
     //self.physicsBody.collisionMask = @[@"weapon"];
@@ -27,10 +26,11 @@ static const CGFloat maximumXPosition = 850.f;
 }
 
 - (void)setupRandomPosition {
+    //@@@@@@@@@@@@@@@@@@@@@ shark can only appear in front
     // value between 0.f and 1.f
     CGFloat random = ((double)arc4random() / ARC4RANDOM_MAX);
-    CGFloat range = maximumXPosition - minimumXPosition;
-    self.position = ccp(minimumXPosition + (random * range), self.position.y);
+    CGFloat range = maximumXPosition - self.position.x;
+    self.position = ccp(self.position.x + (random * range), self.position.y);
 }
 
 @end

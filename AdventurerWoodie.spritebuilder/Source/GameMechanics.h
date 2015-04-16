@@ -12,18 +12,6 @@
 #import "LevelSetting.h"
 
 
-//specify drawing orders of different components at level scenes
-typedef NS_ENUM(NSInteger, DrawingOrder) {
-    
-    DrawingOrderRearGround,
-    DrawingOrderTool,
-    DrawingOrderHero,
-    DrawingOrderWeapon,
-    DrawingOrderEnemy,
-    DrawingOrderFrontGround
-    
-};
-
 
 @interface GameMechanics : CCNode <CCPhysicsCollisionDelegate>
 

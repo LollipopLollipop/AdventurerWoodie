@@ -63,7 +63,7 @@
 									<key>type</key>
 									<integer>2</integer>
 									<key>value</key>
-									<real>0.0</real>
+									<real>30</real>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -78,7 +78,7 @@
 									<key>type</key>
 									<integer>2</integer>
 									<key>value</key>
-									<real>-15</real>
+									<real>15</real>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -157,8 +157,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>1</real>
-							<real>1</real>
+							<real>0.20000000298023224</real>
+							<real>0.20000000298023224</real>
 							<false/>
 							<integer>0</integer>
 						</array>
@@ -171,7 +171,7 @@
 						<key>type</key>
 						<string>Degrees</string>
 						<key>value</key>
-						<real>-10.5</real>
+						<real>0.0</real>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -181,7 +181,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>Shark/1235527.png</string>
+							<string>Shark/1498082.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -380,8 +380,6 @@
 				</array>
 			</dict>
 		</array>
-		<key>selected</key>
-		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>
@@ -437,7 +435,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.69999998807907104</real>
+			<real>2</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

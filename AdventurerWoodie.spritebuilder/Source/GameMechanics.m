@@ -25,18 +25,14 @@ static int levelSpeed = 0;
     CCSprite            *_character;
     CCPhysicsNode       *_staticPhyNode;
     CCPhysicsNode       *_movingNode;
-    CCNode              *_enemiesNode;
-    CCNode              *_settingNode;
-    CCNode              *_startStation;
+    CCNode              *_contentNode;
     CCNode              *_startTool;
     CCNode              *_prevTool;
-    CCNode              *_pullbackNode;
-    CCNode              *_bottomPullBack;
+    CCNode              *_dragTool;
     CCNode              *_weaponPullbackNode;
     CCNode              *_weaponBottomPullBack;
     CCNode              *_mouseJointNode;
     CCPhysicsJoint      *_mouseJoint;
-    CCNode              *_readyTool;
     CCNode              *_weapon;
     CCNode              *_cloudNode;
     CCNode              *_cloud1;
@@ -56,6 +52,8 @@ static int levelSpeed = 0;
     NSMutableArray      *_enemies;
     //array of tools used to build the road for Woodie
     NSMutableArray      *_tools;
+    //array of floating tools unused
+    NSMutableArray      *_floatingTools;
     NSMutableArray      *_weapons;
     BOOL                _gameOver;
     BOOL                _danger;
@@ -77,31 +75,11 @@ static int levelSpeed = 0;
     //_staticPhyNode.collisionDelegate = self;
     _movingNode.collisionDelegate = self;
     
-    
-    
     _loadedLevel = (Level *) [CCBReader load:selectedLevel owner:self];
     [_movingNode addChild:_loadedLevel];
-    _loadedLevelSetting = (LevelSetting *) [CCBReader load:selectedLevelSetting owner:self];
-    [_settingNode addChild:_loadedLevelSetting];
-    /*
-    _rearGround1.zOrder = DrawingOrderRearGround;
-    _rearGround2.zOrder = DrawingOrderRearGround;
-    _startStation.zOrder = DrawingOrderTool;
-    _character.zOrder = DrawingOrderHero;
-    _weapon.zOrder = DrawingOrderWeapon;
-    _frontGround1.zOrder = DrawingOrderFrontGround;
-    _frontGround2.zOrder = DrawingOrderFrontGround;
-     */
     
     levelSpeed = _loadedLevel.levelSpeed;
     
-    /*
-    _startStation.physicsBody.collisionType = @"station";
-    _frontGround1.physicsBody.collisionType = @"ground";
-    _frontGround2.physicsBody.collisionType = @"ground";
-    _rearGround1.physicsBody.collisionType = @"ground";
-    _rearGround2.physicsBody.collisionType = @"ground";
-    _weapon.physicsBody.collisionType = @"weapon";*/
     _timeSinceEnemy = 0.0f;
     //_staticPhyNode.debugDraw = TRUE;
     //_physicsNode.debugDraw = TRUE;
@@ -110,14 +88,15 @@ static int levelSpeed = 0;
     _rearGrounds = @[_rearGround1, _rearGround2];
     _enemies = [NSMutableArray array];
     _tools = [NSMutableArray array];
+    _floatingTools = [NSMutableArray array];
     _weapons = [NSMutableArray array];
     _distance = 0;
     _toolCount = 0;
     _scoreLabel.visible = true;
     
     // nothing shall collide with our invisible nodes
-    _pullbackNode.physicsBody.collisionMask = @[];
-    _bottomPullBack.physicsBody.collisionMask = @[];
+    //_pullbackNode.physicsBody.collisionMask = @[];
+    //_bottomPullBack.physicsBody.collisionMask = @[];
     _weaponPullbackNode.physicsBody.collisionMask = @[];
     _weaponBottomPullBack.physicsBody.collisionMask = @[];
     _prevTool = _startTool;
@@ -135,8 +114,9 @@ static int levelSpeed = 0;
         {
             CGPoint touchLocation = [touch locationInNode:self];
             CCLOG(@"TOUCH LOC %f, %f", touchLocation.x, touchLocation.y);
+            CCLOG(@"Weapon LOC %f, %f", _weapon.position.x, _weapon.position.y);
             // start catapult dragging when a touch inside of the ready wood occurs
-            if (CGRectContainsPoint([_readyTool boundingBox], touchLocation))
+            /*if (CGRectContainsPoint([_readyTool boundingBox], touchLocation))
             {
                 dragTool = TRUE;
                 //CCLOG(@"DRAG WOOD");
@@ -145,8 +125,27 @@ static int levelSpeed = 0;
                 
                 // setup a spring joint between the mouseJointNode and the catapultArm
                 _mouseJoint = [CCPhysicsJoint connectedSpringJointWithBodyA:_mouseJointNode.physicsBody bodyB:_readyTool.physicsBody anchorA:ccp(0, 0) anchorB:ccp(29, 10) restLength:0.f stiffness:5000.f damping:150.f];
+            }*/
+            //CGPoint worldPosition = [self convertToWorldSpace:touchLocation];
+            //CGPoint screenPosition = [_movingNode convertToNodeSpace:worldPosition];
+            
+            for (CCNode *tool in _floatingTools)
+            {
+                if (CGRectContainsPoint([tool boundingBox], touchLocation))
+                {
+                    dragTool = TRUE;
+                    _dragTool = tool;
+                    _dragTool.position = touchLocation;
+                    /*
+                    _mouseJointNode.position = touchLocation;
+                    
+                    // setup a spring joint between the mouseJointNode and the tool
+                    _mouseJoint = [CCPhysicsJoint connectedSpringJointWithBodyA:_mouseJointNode.physicsBody bodyB:_dragTool.physicsBody anchorA:ccp(0, 0) anchorB:ccp(29, 10) restLength:0.f stiffness:5000.f damping:150.f];*/
+                    break;
+                }
             }
-            else if (CGRectContainsPoint([_weapon boundingBox], touchLocation))
+            
+            if (CGRectContainsPoint([_weapon boundingBox], touchLocation))
             {
                 dragWeapon = TRUE;
                 //CCLOG(@"DRAG WEAPON");
@@ -169,7 +168,12 @@ static int levelSpeed = 0;
 {
     // whenever touches move, update the position of the mouseJointNode to the touch position
     CGPoint touchLocation = [touch locationInNode:self];
-    _mouseJointNode.position = touchLocation;
+    //CGPoint worldPosition = [self convertToWorldSpace:touchLocation];
+    //CGPoint screenPosition = [_movingNode convertToNodeSpace:worldPosition];
+    if(dragTool)
+        _dragTool.position = touchLocation;
+    else if(dragWeapon)
+        _mouseJointNode.position = touchLocation;
 }
 
 - (void)touchEnded:(CCTouch *)touch withEvent:(CCTouchEvent *)event {
@@ -178,7 +182,8 @@ static int levelSpeed = 0;
         //CCLOG(@"PLACE WOOD");
         //CGPoint touchLocation = [touch locationInNode:self];
         [self placeTool];
-        [self releaseTool];
+        //[self releaseTool];
+        dragTool = FALSE;
     }
     if(dragWeapon){
         //CCLOG(@"MOVE WEAPON");
@@ -194,7 +199,8 @@ static int levelSpeed = 0;
         //CCLOG(@"PLACE WOOD");
         //CGPoint touchLocation = [touch locationInNode:self];
         [self placeTool];
-        [self releaseTool];
+        //[self releaseTool];
+        dragTool = FALSE;
     }
     if(dragWeapon){
         //CCLOG(@"MOVE WEAPON");
@@ -213,7 +219,7 @@ static int levelSpeed = 0;
         // releases the joint and lets the catpult snap back
         [_mouseJoint invalidate];
         _mouseJoint = nil;
-        _readyTool.position = ccp(50,180);
+        //_readyTool.position = ccp(50,180);
         dragTool = FALSE;
     }
 }
@@ -230,33 +236,39 @@ static int levelSpeed = 0;
 #pragma mark - Apply Dragged Obj
 - (void)placeTool
 {
+    
     //CCLOG(@"ready wood orig pos %f %f", _readyTool.position.x, _readyTool.position.y);
-    CGPoint worldPosition = [self convertToWorldSpace:_readyTool.position];
+    CGPoint worldPosition = [self convertToWorldSpace:_dragTool.position];
     CGPoint screenPosition = [_movingNode convertToNodeSpace:worldPosition];
     //CCLOG(@"ready wood screen pos %f %f", screenPosition.x, screenPosition.y);
     //CCLOG(@"prev wood pos %f %f", _prevTool.position.x, _prevTool.position.y);
     Wood* wood= (Wood*)[CCBReader load:@"Wood"];
+    
     if(CGRectContainsPoint([_prevTool boundingBox], screenPosition))
     {
         //CCLOG(@"INSIDE BOUNDING BOX");
         wood.position = ccp(_prevTool.position.x+58, _prevTool.position.y);
-        [_movingNode addChild:wood];
+        //[_movingNode addChild:wood];
+        [_contentNode addChild:wood];
+        [_staticPhyNode removeChild:_dragTool];
         //[_staticPhyNode addChild:wood];
         [_tools addObject:wood];
+        [_floatingTools removeObject:_dragTool];
         _prevTool = wood;
-        CCLOG(@"PREV TOOL LOC %f, %f", _prevTool.position.x, _prevTool.position.y);
+        //CCLOG(@"PREV TOOL LOC %f, %f", _prevTool.position.x, _prevTool.position.y);
     }
-    else
+    /*else
     {
         //CCLOG(@"NOT INSIDE BOUNDING BOX");
         wood.position = screenPosition;
-        [_movingNode addChild:wood];
+        //[_movingNode addChild:wood];
+        [_contentNode addChild:wood];
         //[_staticPhyNode addChild:wood];
         //[_tools addObject:wood];
         CGPoint launchDirection = ccp(0, -1);
         CGPoint force = ccpMult(launchDirection, 8000);
         [wood.physicsBody applyForce:force];
-    }
+    }*/
     
 }
 
@@ -278,18 +290,43 @@ static int levelSpeed = 0;
 {
     Shark *shark = (Shark *)[CCBReader load:@"Shark"];
     
-    CGPoint worldPosition = [self convertToWorldSpace:ccp(0, 10)];//y position is fixed at 0
+    CGPoint worldPosition = [self convertToWorldSpace:ccp(_prevTool.position.x, 30)];
+    //y position is fixed at 0
     CGPoint screenPosition = [_movingNode convertToNodeSpace:worldPosition];
     
     shark.position = screenPosition;
     [shark setupRandomPosition];
-    [_enemiesNode addChild:shark];
+    [_contentNode addChild:shark];
     //[_movingNode addChild:shark];
     [_enemies addObject:shark];
     //CCLOG(@"ADD SHARK");
     //CCLOG(@"ENEMIES COUNT %lu", [_enemies count]);
 }
 
+#pragma mark - Tool Spawning
+- (void)addWood
+{
+    Wood *wood = (Wood *)[CCBReader load:@"Wood"];
+    
+    CGPoint worldPosition = [self convertToWorldSpace:ccp(0, 0)];
+    //y position is fixed at 0
+    CGPoint screenPosition = [_movingNode convertToNodeSpace:worldPosition];
+    
+    wood.position = screenPosition;
+    [wood setupRandomPosition];
+    //[_contentNode addChild:wood];
+    //[_movingNode addChild:shark];
+    [_staticPhyNode addChild:wood];
+    [_floatingTools addObject:wood];
+}
+- (void)removeFloatingWood
+{
+    CCNode *wood = [_floatingTools firstObject];
+    //[_contentNode addChild:wood];
+    //[_movingNode addChild:shark];
+    [_staticPhyNode removeChild:wood];
+    [_floatingTools removeObject:wood];
+}
 
 
 #pragma mark - Game Actions
@@ -435,10 +472,28 @@ static int levelSpeed = 0;
         }
     }
     
+    for (CCNode *tool in _floatingTools) {
+        CGPoint toolWorldPosition = [_movingNode convertToWorldSpace:tool.position];
+        CGPoint toolScreenPosition = [self convertToNodeSpace:toolWorldPosition];
+        if (toolScreenPosition.x < -tool.contentSize.width) {
+            if (!offScreenTools) {
+                offScreenTools = [NSMutableArray array];
+            }
+            [offScreenTools addObject:tool];
+        }
+    }
+    
     for (CCNode *toolToRemove in offScreenTools) {
-        //CCLOG(@"REMOVE");
+        
         [toolToRemove removeFromParent];
-        [_tools removeObject:toolToRemove];
+        if([_tools containsObject:toolToRemove]){
+            [_tools removeObject:toolToRemove];
+            CCLOG(@"REMOVE TOOL");
+        }
+        else{
+            [_floatingTools removeObject:toolToRemove];
+            CCLOG(@"REMOVE FLOATING TOOL");
+        }
     }
     
     for (CCNode *weapon in _weapons) {
@@ -459,7 +514,7 @@ static int levelSpeed = 0;
     }
     
     
-    if(_character.position.x > (_prevTool.position.x + _prevTool.contentSize.width/2 + (_character.contentSize.width*_character.scaleX)/2))
+    if(_character.position.x > (_prevTool.position.x + _prevTool.contentSize.width/2 + (_character.contentSize.width)/2))
     {
         //CCLOG(@"EXCEEDS 6");
         //hero drops into sea water if not step onto tool
@@ -479,7 +534,6 @@ static int levelSpeed = 0;
             _character.physicsBody.velocity = ccp(levelSpeed, 0);
             //Increment the time since the last obstacle was added
             _timeSinceEnemy += delta;
-            
             //CCLOG(@"time since safe step is %f", _timeSinceSafeStep);
             //Check to see if two seconds have passed
             if (_timeSinceEnemy > 10.0f)
@@ -489,6 +543,14 @@ static int levelSpeed = 0;
                 //Then reset the timer
                 _timeSinceEnemy = 0.0f;
                 
+            }
+            if ([_floatingTools count]<=5)
+            {
+                [self addWood];
+            }
+            if ([_floatingTools count]>8)
+            {
+                [self removeFloatingWood];
             }
             
         }
@@ -533,7 +595,7 @@ static int levelSpeed = 0;
     //[self showScore];
     return TRUE;
 }
--(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair ground:(CCNode*)ground tool:(CCSprite*)tool {
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair tool:(CCSprite*)tool ground:(CCNode*)ground{
     CCLOG(@"CLEAR FLOATING TOOL");
     [tool removeFromParent];
     //[self showScore];
@@ -550,10 +612,13 @@ static int levelSpeed = 0;
     [tool.parent addChild:explosion];
     // make the particle effect clean itself up, once it is completed
     explosion.autoRemoveOnFinish = YES;
-    [tool removeFromParent];
-    
     //#############!!!!!!!!!!!!!!!!!!@@@@@@@@@@@@@@@@@@
     //different strategies for tools in or not in _tools!!!!!!!!!!!!!!!!!
+    if([_tools containsObject:tool]){
+        [_tools removeObject:tool];
+        _prevTool = [_tools lastObject];
+    }
+    [tool removeFromParent];
     
 }
 - (void)enemyKilled:(CCNode *)enemy {
