@@ -16,7 +16,6 @@
 @interface GameMechanics : CCNode <CCPhysicsCollisionDelegate>
 
 - (void)placeTool;//abstract
-- (void)releaseTool;
 - (void)applyWeapon;
 - (void)releaseWeapon;
 - (void)gameOver;

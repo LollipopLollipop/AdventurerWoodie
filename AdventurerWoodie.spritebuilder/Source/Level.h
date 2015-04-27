@@ -12,5 +12,11 @@
 
 @property (nonatomic, copy) NSString *nextLevelName;
 @property (nonatomic, assign) int levelSpeed;
+@property (nonatomic, assign) int enemyInterval;
+@property (nonatomic, assign) int woodTypeCount;
+@property (nonatomic, assign) int woodInterval;
+@property (nonatomic, assign) int levelNum;
+@property (nonatomic, assign) int levelGoal;
+
 
 @end

@@ -11,7 +11,7 @@
 
 @implementation Wood
 #define ARC4RANDOM_MAX      0x100000000
-
+static const CGFloat minimumXPosition = 100.f;
 static const CGFloat maximumXPosition = 450.f;
 static const CGFloat maximumYPosition = 30.f;
 static const CGFloat minimumYPosition = 10.f;

@@ -315,11 +315,9 @@
 				<key>type</key>
 				<string>Texture</string>
 				<key>value</key>
-				<string>Shark/blood_drop.png</string>
+				<string>Enemies/blood_drop.png</string>
 			</dict>
 		</array>
-		<key>selected</key>
-		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>

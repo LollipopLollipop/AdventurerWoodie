@@ -9,5 +9,5 @@
 #import "CCNode.h"
 
 @interface LevelSetting : CCNode
-
+@property (nonatomic, copy) NSString *nextLevelSettingName;
 @end
