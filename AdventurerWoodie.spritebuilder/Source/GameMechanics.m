@@ -7,11 +7,13 @@
 //
 
 #import "GameMechanics.h"
-#import "Weapon.h"
 #import "CCPhysics+ObjectiveChipmunk.h"
 #include <stdlib.h>
-#import "Wood.h"
 #import "PopupAlert.h"
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKShareKit/FBSDKShareKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+
 
 #define ARC4RANDOM_MAX      0x100000000
 static NSString * const kFirstLevel = @"Level1";
@@ -23,6 +25,7 @@ static int woodTypeCount = 0;
 static int woodInterval = 0;
 static int levelGoal = 0;
 
+
 @implementation GameMechanics
 {
     //variable representing different scene component
@@ -30,17 +33,17 @@ static int levelGoal = 0;
     CCNode              *_setupNode;//level dependent
     CCPhysicsNode       *_staticPhyNode;
     CCPhysicsNode       *_movingNode;
-    CCNode              *_contentNode;
+    CCNode              *_contentNode;//to add woods and enemies
     CCNode              *_startTool;
     //CCNode              *_startStation;
     CCNode              *_prevTool;
-    CCNode              *_dragTool;
+    CCNode              *_dragTool;//track the current wood being dragged
     CCNode              *_weaponPullbackNode;
     CCNode              *_weaponBottomPullBack;
     CCNode              *_mouseJointNode;
     CCPhysicsJoint      *_mouseJoint;
     CCNode              *_weapon;
-    
+    //content for _setupNode
     CCNode              *_cloudNode;
     CCNode              *_cloud1;
     CCNode              *_cloud2;
@@ -48,11 +51,13 @@ static int levelGoal = 0;
     CCNode              *_bgNode;
     CCNode              *_bg1;
     CCNode              *_bg2;
-    //CCButton            *_pauseButton;
     CCLabelTTF          *_scoreLabel;
     CCLabelTTF          *_levelNum;
     CCLabelTTF          *_curScore;
     CCLabelTTF          *_bestScore;
+    CCLabelTTF          *_passMsg;
+    CCButton            *_pauseBtn;
+    CCButton            *_resumeBtn;
     NSArray             *_clouds;
     NSArray             *_bgs;
     
@@ -60,19 +65,26 @@ static int levelGoal = 0;
     NSTimeInterval      _sinceTouch;
     NSMutableArray      *_enemies;
     //array of tools used to build the road for Woodie
-    NSMutableArray      *_tools;
+    NSMutableArray      *_pathWoods;
     //array of floating tools unused
-    NSMutableArray      *_floatingTools;
+    NSMutableArray      *_floatingWoods;
     NSMutableArray      *_weapons;
+    //bool values to monitor game status
     BOOL                _gameOver;
-    BOOL                _danger;
+    BOOL                _falling;
+    BOOL                _stop;
+    BOOL                _safe;
     int                 _distance;
-    int                 _toolCount;
+    int                 _safeCount;
+    int                 _apartCount;
+    //bool values to distinguish what is being dragged
     BOOL                dragTool;
     BOOL                dragWeapon;
     float               _timeSinceEnemy;
     float               _timeSinceWood;
+    float               _timeSincePass;
     float               _timeSinceAppear;
+    float               _timeSinceNotSafe;
     Level               *_loadedLevel;
 
 }
@@ -80,48 +92,53 @@ static int levelGoal = 0;
 #pragma mark - Node Lifecycle
 
 - (void)didLoadFromCCB {
-    CCLOG(@"bp3");
+    //CCLOG(@"bp3");
     self.userInteractionEnabled = TRUE;
     //The delegate object that you want to respond to collisions for the collision behavior.
     //_staticPhyNode.collisionDelegate = self;
     _movingNode.collisionDelegate = self;
     
-    //_loadedLevelSetting = (LevelSetting *) [CCBReader load:selectedLevelSetting owner:self];
-    
     _loadedLevel = (Level *) [CCBReader load:selectedLevel owner:self];
     [_setupNode addChild:_loadedLevel];
-    //[_movingNode addChild:_loadedLevel];
     levelSpeed = _loadedLevel.levelSpeed;
     enemyInterval = _loadedLevel.enemyInterval;
     woodTypeCount = _loadedLevel.woodTypeCount;
     woodInterval = _loadedLevel.woodInterval;
     levelNum = _loadedLevel.levelNum;
     levelGoal = _loadedLevel.levelGoal;
-    CCLOG(@"bp4");
+    
+    //var init
     _timeSinceEnemy = 0.0f;
     _timeSinceWood = 0.0f;
     _timeSinceAppear = 0.0f;
+    _timeSincePass = 0.0f;
+    _timeSinceNotSafe = 0.0f;
     //_staticPhyNode.debugDraw = TRUE;
     //_physicsNode.debugDraw = TRUE;
     _clouds = @[_cloud1, _cloud2];
     _bgs = @[_bg1, _bg2];
     _enemies = [NSMutableArray array];
-    _tools = [NSMutableArray array];
-    _floatingTools = [NSMutableArray array];
+    _pathWoods = [NSMutableArray array];
+    _floatingWoods = [NSMutableArray array];
     _weapons = [NSMutableArray array];
     _distance = 0;
-    _toolCount = 0;
-    _scoreLabel.visible = true;
-    CCLOG(@"bp5");
+    _apartCount = 0;
+    _safeCount = 0;
+    _scoreLabel.visible = TRUE;
+    _passMsg.visible = FALSE;
+    [_pathWoods addObject:_startTool];
+    _prevTool = _startTool;
     // nothing shall collide with our invisible nodes
     _weaponPullbackNode.physicsBody.collisionMask = @[];
     _weaponBottomPullBack.physicsBody.collisionMask = @[];
-    _prevTool = _startTool;
-    //CCLOG(@"PREV TOOL LOC %f, %f", _prevTool.position.x, _prevTool.position.y);
+    
     _character.physicsBody.sensor = YES;
     [self addWood];
-    CCLOG(@"bp6");
     [self addEnemy];
+    _gameOver = FALSE;
+    _falling = FALSE;
+    _stop = FALSE;
+    _safe = TRUE;
 }
 
 #pragma mark - Touch Handling
@@ -129,7 +146,6 @@ static int levelGoal = 0;
 - (void)touchBegan:(CCTouch *)touch withEvent:(CCTouchEvent *)event {
     if (!_gameOver) {
         _sinceTouch = 0.f;
-        
         @try
         {
             CGPoint touchLocation = [touch locationInNode:self];
@@ -145,19 +161,20 @@ static int levelGoal = 0;
                 _mouseJoint = [CCPhysicsJoint connectedSpringJointWithBodyA:_mouseJointNode.physicsBody bodyB:_weapon.physicsBody anchorA:ccp(0, 0) anchorB:ccp(45.50, 54.50) restLength:0.f stiffness:3000.f damping:150.f];
             }
             else{
-                CCLOG(@"TOUCH LOC %f %f", touchLocation.x, touchLocation.y);
+                //CCLOG(@"TOUCH LOC %f %f", touchLocation.x, touchLocation.y);
+                //convert to _contentNode coordinates
                 CGPoint worldPosition = [self convertToWorldSpace:touchLocation];
                 CGPoint screenPosition = [_contentNode convertToNodeSpace:worldPosition];
-                CCLOG(@"TOUCH SCREEN LOC %f %f", screenPosition.x, screenPosition.y);
+                //CCLOG(@"TOUCH SCREEN LOC %f %f", screenPosition.x, screenPosition.y);
                 //loop to check if any tool(wood) dragged
-                for (CCNode *tool in _floatingTools)
+                for (CCNode *tool in _floatingWoods)
                 {
                     if (CGRectContainsPoint([tool boundingBox], screenPosition))
                     {
-                        CCLOG(@"DRAG DETECTED");
+                        //CCLOG(@"DRAG DETECTED");
                         dragTool = TRUE;
-                        _dragTool = tool;
-                        _dragTool.position = touchLocation;
+                        _dragTool = tool;//update _dragTool
+                        _dragTool.position = screenPosition;
                         break;
                     }
                 }
@@ -176,6 +193,7 @@ static int levelGoal = 0;
     CGPoint touchLocation = [touch locationInNode:self];
     CGPoint worldPosition = [self convertToWorldSpace:touchLocation];
     CGPoint screenPosition = [_contentNode convertToNodeSpace:worldPosition];
+    //handling two different coordinates
     if(dragTool)
         _dragTool.position = screenPosition;
     else if(dragWeapon)
@@ -185,16 +203,10 @@ static int levelGoal = 0;
 - (void)touchEnded:(CCTouch *)touch withEvent:(CCTouchEvent *)event {
     
     if(dragTool){
-        //CCLOG(@"PLACE WOOD");
-        //CGPoint touchLocation = [touch locationInNode:self];
         [self placeTool];
-        //[self releaseTool];
         dragTool = FALSE;
     }
     if(dragWeapon){
-        //CCLOG(@"MOVE WEAPON");
-        //_weapon.physicsBody.velocity =
-        //[_weapon.physicsBody applyImpulse:ccp(0, 400.f)];
         [self applyWeapon];
         [self releaseWeapon];
     }
@@ -202,16 +214,10 @@ static int levelGoal = 0;
 
 - (void)touchCancelled:(CCTouch *)touch withEvent:(CCTouchEvent *)event {
     if(dragTool){
-        //CCLOG(@"PLACE WOOD");
-        //CGPoint touchLocation = [touch locationInNode:self];
         [self placeTool];
-        //[self releaseTool];
         dragTool = FALSE;
     }
     if(dragWeapon){
-        //CCLOG(@"MOVE WEAPON");
-        //_weapon.physicsBody.velocity =
-        //[_weapon.physicsBody applyImpulse:ccp(0, 400.f)];
         [self applyWeapon];
         [self releaseWeapon];
     }
@@ -222,7 +228,7 @@ static int levelGoal = 0;
 #pragma mark - Release Dragged Weapon
 - (void)releaseWeapon {
     if (_mouseJoint != nil) {
-        // releases the joint and lets the catpult snap back
+        // releases the joint and lets the weapon back
         [_mouseJoint invalidate];
         _mouseJoint = nil;
         _weapon.position = ccp(500,250);
@@ -233,35 +239,19 @@ static int levelGoal = 0;
 #pragma mark - Apply Dragged Obj
 - (void)placeTool
 {
-    
-    //CCLOG(@"ready wood orig pos %f %f", _readyTool.position.x, _readyTool.position.y);
-    //CGPoint worldPosition = [self convertToWorldSpace:_dragTool.position];
-    //CGPoint screenPosition = [_movingNode convertToNodeSpace:worldPosition];
-    //CCLOG(@"ready wood screen pos %f %f", screenPosition.x, screenPosition.y);
-    //CCLOG(@"prev wood pos %f %f", _prevTool.position.x, _prevTool.position.y);
-    //Wood* wood= (Wood*)[CCBReader load:@"Wood"];
     if(CGRectContainsPoint([_prevTool boundingBox], _dragTool.position))
     {
-        //CCLOG(@"INSIDE BOUNDING BOX");
+        _dragTool.physicsBody.collisionMask = @[@"hero"];
         _dragTool.position = ccp(_prevTool.position.x+(_prevTool.contentSize.width/2)+(_dragTool.contentSize.width/2), _prevTool.position.y);
-        //[_contentNode addChild:wood];
-        //[_contentNode removeChild:_dragTool];
-        [_tools addObject:_dragTool];
-        _dragTool.physicsBody.collisionMask = @[];
-        [_floatingTools removeObject:_dragTool];
         _prevTool = _dragTool;
-        
-        NSString *soundFilePath = [NSString stringWithFormat:@"%@/Blop.mp3",
-                                   [[NSBundle mainBundle] resourcePath]];
-        NSURL *soundFileURL = [NSURL fileURLWithPath:soundFilePath];
-        
-        AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL
-                                                                       error:nil];
-        player.numberOfLoops = -1; //Infinite
-        
-        [player play];
+        [_pathWoods addObject:_dragTool];
+        [_floatingWoods removeObject:_dragTool];
+        //update _prevTool
+        [self configureSystemSound:0];
+        [self playSystemSound];
     }
     else{
+        //naturally fall if not able to connect to prevTool
         _dragTool.physicsBody.affectedByGravity = TRUE;
     }
     
@@ -274,7 +264,9 @@ static int levelGoal = 0;
     [_weapon.physicsBody applyForce:force];
     CGPoint worldPosition = [self convertToWorldSpace:_weapon.position];
     CGPoint screenPosition = [_movingNode convertToNodeSpace:worldPosition];
-    Weapon* invisibleWeapon= (Weapon*)[CCBReader load:@"Weapon"];
+    CCNode* invisibleWeapon= (CCNode*)[CCBReader load:@"Weapon"];
+    invisibleWeapon.visible = FALSE;
+    invisibleWeapon.physicsBody.sensor = YES;
     invisibleWeapon.position = screenPosition;
     [_movingNode addChild:invisibleWeapon];
     [_weapons addObject:invisibleWeapon];
@@ -283,6 +275,7 @@ static int levelGoal = 0;
 #pragma mark - Enemy Spawning
 - (void)addEnemy
 {
+    //different enemies for different levels
     NSString *curTypeString = [NSString stringWithFormat:@"Enemy%d", levelNum];
     CCNode *enemy = (CCNode *)[CCBReader load:curTypeString];
     enemy.physicsBody.sensor = YES;
@@ -291,16 +284,17 @@ static int levelGoal = 0;
     [_enemies addObject:enemy];
 }
 
-#pragma mark - Tool Spawning
+#pragma mark - Wood Spawning
 - (void)addWood
 {
+    //with the increasing levels, more wood types to play with
     int curType = arc4random_uniform(woodTypeCount)+1;
     NSString *curTypeString = [NSString stringWithFormat:@"Wood%d", curType];
     CCNode *wood = (CCNode *)[CCBReader load: curTypeString];
     wood.physicsBody.sensor = YES;
     wood.position = [self getRandomPosition:FALSE];
     [_contentNode addChild:wood];
-    [_floatingTools addObject:wood];
+    [_floatingWoods addObject:wood];
 }
 
 - (CGPoint) getRandomPosition: (BOOL) staticY
@@ -333,79 +327,115 @@ static int levelGoal = 0;
 #pragma mark - Game Actions
 
 - (void)gameOver:(int)status {
+    
     if (!_gameOver) {
-        CCLOG(@"GAME OVER");
+        //CCLOG(@"GAME OVER");
         _gameOver = TRUE;
+        _character.physicsBody.velocity = ccp(0.0f, 0.0f);
+        [_character stopAllActions];
+        
+        //pop up different windows according to game over status
         PopupAlert *popup;
         if(status==0){
-            CCLOG(@"DROWNED");
+            //CCLOG(@"DROWNED");
             popup = (PopupAlert *)[CCBReader load:@"DrownedWindow" owner:self];
+            [self configureSystemSound:4];
+            [self playSystemSound];
         }
         else if(status==1){
-            CCLOG(@"KILLED");
+            //CCLOG(@"KILLED");
             popup = (PopupAlert *)[CCBReader load:@"KilledWindow" owner:self];
+            [self configureSystemSound:3];
+            [self playSystemSound];
         }else{
-            CCLOG(@"PASSED");
+            //CCLOG(@"PASSED");
             popup = (PopupAlert *)[CCBReader load:@"PassWindow" owner:self];
+            [self configureSystemSound:5];
+            [self playSystemSound];
             
         }
+        NSString *levelBestScoreKey = [NSString stringWithFormat:@"BestScore%d", levelNum];
+        int levelBestScore = [[NSUserDefaults standardUserDefaults] integerForKey:levelBestScoreKey] ;
+        if(_distance > levelBestScore){
+            [[NSUserDefaults standardUserDefaults] setInteger: _distance forKey: levelBestScoreKey];
+            levelBestScore = _distance;
+        }
+        
         popup.positionType = CCPositionTypeNormalized;
         popup.position = ccp(0.5, 0.5);
         _levelNum.string = [NSString stringWithFormat:@"%d", levelNum];
         _curScore.string = [NSString stringWithFormat:@"%d", _distance];
-        _bestScore.string = [NSString stringWithFormat:@"%d", _distance];
+        _bestScore.string = [NSString stringWithFormat:@"%d", levelBestScore];
         [self addChild:popup];
         //pop up window
     }
 }
 
+//toggle the pause and resume buttons
 - (void)pause {
-    CCLOG(@"Pause");
-    //comes with FB check later
-    _character.physicsBody.velocity = ccp(0.0f, 0.0f);
-    _character.physicsBody.allowsRotation = FALSE;
-    [_character stopAllActions];
-}
-
-- (void) getInDanger {
-    if(!_danger) {
-        _danger = TRUE;
-        _character.physicsBody.allowsRotation = TRUE;
-        _character.physicsBody.affectedByGravity = TRUE;
-        //_character.physicsBody.velocity = ccp(0.0f, 0.0f);
-        //_character.rotation = 90.f;
-        //_character.physicsBody.allowsRotation = FALSE;
-        //_character.physicsBody.allowsRotation = FALSE;
-        //[_character stopAllActions];
-        //CGPoint launchDirection = ccp(0, -1);
-        //CGPoint force = ccpMult(launchDirection, 400);
-        //[_character.physicsBody applyForce:force];
-        CCLOG(@"DANGER");
+    if(!_stop){
+        _stop = TRUE;
+        [self configureSystemSound:6];
+        [self playSystemSound];
+        //CCLOG(@"Pause");
+        _character.physicsBody.velocity = ccp(0.0f, 0.0f);
+        [_character stopAllActions];
+        _pauseBtn.visible = FALSE;
+        _resumeBtn.visible = TRUE;
     }
 }
+
+-(void)resume{
+    if(_stop){
+        _stop = FALSE;
+        [self configureSystemSound:6];
+        [self playSystemSound];
+        _pauseBtn.visible = TRUE;
+        _resumeBtn.visible = FALSE;
+    }
+}
+
+
 - (void)restart {
+    [self configureSystemSound:6];
+    [self playSystemSound];
     CCScene *scene = [CCBReader loadAsScene:@"GameMechanics"];
-    [[CCDirector sharedDirector] replaceScene:scene];
-    //CCTransition *transition = [CCTransition transitionFadeWithDuration:0.8f];
-    //[[CCDirector sharedDirector] presentScene:scene withTransition:transition];
+    //[[CCDirector sharedDirector] replaceScene:scene];
+    CCTransition *transition = [CCTransition transitionFadeWithDuration:0.8f];
+    [[CCDirector sharedDirector] presentScene:scene withTransition:transition];
     
 }
 
 #pragma mark - Update
 - (void)update:(CCTime)delta
 {
+    
+    //_prevTool = [_pathWoods lastObject];
+    
+    if(_distance > levelGoal){
+        _timeSincePass += delta;
+        if(_timeSincePass<10.f){
+            _passMsg.string = [NSString stringWithFormat:@"%d miles completed! Level %d passed!", levelGoal, levelNum];
+            _passMsg.visible = TRUE;
+        }
+        else{
+            _passMsg.visible = FALSE;
+        }
+    }
+    
+    
     _sinceTouch += delta;
-    //CCLOG(@"HERO SPEED IS %f", _character.physicsBody.velocity.x);
     //calc and display current distance conquered
     _distance+=delta*_character.physicsBody.velocity.x*10;
     //CCLOG(@"distance is %d", _distance);
     _scoreLabel.string = [NSString stringWithFormat:@"%d", _distance];
-    //CCLOG(@"movingnode width is %f", _movingNode.contentSize.width);
-    //screen view move in the same pace as the main character
+    
+    
+    //moving view configurations
     _movingNode.position = ccp(_movingNode.position.x - (_character.physicsBody.velocity.x * delta), _movingNode.position.y);
     _cloudNode.position = ccp(_cloudNode.position.x - ((_character.physicsBody.velocity.x)*delta), _cloudNode.position.y);
     _bgNode.position = ccp(_bgNode.position.x - ((_character.physicsBody.velocity.x/2)*delta), _bgNode.position.y);
-    //_startStation.position = ccp(_startStation.position.x - (_character.physicsBody.velocity.x * delta), _startStation.position.y);
+    
     
     // loop the clouds
     for (CCNode *cloud in _clouds) {
@@ -438,11 +468,12 @@ static int levelGoal = 0;
     
     //remove created objects
     NSMutableArray *offScreenEnemies = nil;
-    NSMutableArray *offScreenTools = nil;
+    NSMutableArray *offScreenPathTools = nil;
+    NSMutableArray *offScreenFloatingTools = nil;
     NSMutableArray *offScreenWeapons = nil;
     
     for (CCNode *enemy in _enemies) {
-        CGPoint enemyWorldPosition = [_movingNode convertToWorldSpace:enemy.position];
+        CGPoint enemyWorldPosition = [_contentNode convertToWorldSpace:enemy.position];
         CGPoint enemyScreenPosition = [self convertToNodeSpace:enemyWorldPosition];
         if (enemyScreenPosition.x < -50) {
             if (!offScreenEnemies) {
@@ -453,44 +484,42 @@ static int levelGoal = 0;
     }
     
     for (CCNode *enemyToRemove in offScreenEnemies) {
-        CCLOG(@"REMOVE");
+        //CCLOG(@"REMOVE");
         [enemyToRemove removeFromParent];
         [_enemies removeObject:enemyToRemove];
     }
     
-    for (CCNode *tool in _tools) {
-        CGPoint toolWorldPosition = [_movingNode convertToWorldSpace:tool.position];
+    for (CCNode *tool in _pathWoods) {
+        CGPoint toolWorldPosition = [_contentNode convertToWorldSpace:tool.position];
         CGPoint toolScreenPosition = [self convertToNodeSpace:toolWorldPosition];
         if (toolScreenPosition.x < -tool.contentSize.width) {
-            if (!offScreenTools) {
-                offScreenTools = [NSMutableArray array];
+            if (!offScreenPathTools) {
+                offScreenPathTools = [NSMutableArray array];
             }
-            [offScreenTools addObject:tool];
+            [offScreenPathTools addObject:tool];
+        }
+    }
+    for (CCNode *toolToRemove in offScreenPathTools) {
+        //CCLOG(@"REMOVE");
+        [toolToRemove removeFromParent];
+        [_pathWoods removeObject:toolToRemove];
+    }
+    
+    for (CCNode *tool in _floatingWoods) {
+        CGPoint toolWorldPosition = [_contentNode convertToWorldSpace:tool.position];
+        CGPoint toolScreenPosition = [self convertToNodeSpace:toolWorldPosition];
+        if (toolScreenPosition.x < -tool.contentSize.width) {
+            if (!offScreenFloatingTools) {
+                offScreenFloatingTools = [NSMutableArray array];
+            }
+            [offScreenFloatingTools addObject:tool];
         }
     }
     
-    for (CCNode *tool in _floatingTools) {
-        CGPoint toolWorldPosition = [_movingNode convertToWorldSpace:tool.position];
-        CGPoint toolScreenPosition = [self convertToNodeSpace:toolWorldPosition];
-        if (toolScreenPosition.x < -tool.contentSize.width) {
-            if (!offScreenTools) {
-                offScreenTools = [NSMutableArray array];
-            }
-            [offScreenTools addObject:tool];
-        }
-    }
-    
-    for (CCNode *toolToRemove in offScreenTools) {
+    for (CCNode *toolToRemove in offScreenFloatingTools) {
         
         [toolToRemove removeFromParent];
-        if([_tools containsObject:toolToRemove]){
-            [_tools removeObject:toolToRemove];
-            CCLOG(@"REMOVE TOOL");
-        }
-        else{
-            [_floatingTools removeObject:toolToRemove];
-            CCLOG(@"REMOVE FLOATING TOOL");
-        }
+        [_floatingWoods removeObject:toolToRemove];
     }
     
     for (CCNode *weapon in _weapons) {
@@ -510,31 +539,33 @@ static int levelGoal = 0;
         [_weapons removeObject:weaponToRemove];
     }
     
-    if (!_gameOver && !_danger)
-    {
-        //CCLOG(@"NOT GAME OVER and NO DANGER");
-        @try
+    if(!_safe){
+        _character.physicsBody.affectedByGravity = TRUE;
+        _falling = TRUE;
+    }
+    if(_falling){
+        if(_character.position.y<30.f)
         {
             if(_distance > levelGoal){
                 [self gameOver:2];
             }
-            else if(_character.position.x > (_prevTool.position.x + _prevTool.contentSize.width/2 + 10.f))
-            {
-                //CCLOG(@"EXCEEDS 6");
-                //hero drops into sea water if not step onto tool
-                /*_character.physicsBody.velocity = ccp(0.f,0.f);
-                 [_character stopAllActions];
-                 CGPoint launchDirection = ccp(0, -1);
-                 CGPoint force = ccpMult(launchDirection, 4000);
-                 [_character.physicsBody applyForce:force];*/
-                [self getInDanger];
+            else{
+                [self gameOver:0];
             }
-            else {
+            
+        }
+    }
+    else if (!_gameOver && !_stop) //only proceed when not gameover, not falling and not paused
+    {
+        //CCLOG(@"NOT GAME OVER and NO DANGER");
+        @try
+        {
                 _character.physicsBody.velocity = ccp(levelSpeed, 0);
-                //Increment the time since the last obstacle was added
+                //Increment the time since the last enemy/wood was added
                 _timeSinceEnemy += delta;
                 _timeSinceWood += delta;
                 _timeSinceAppear +=  delta;
+            
                 //CCLOG(@"time since safe step is %f", _timeSinceSafeStep);
                 
                 if (_timeSinceEnemy > (double)enemyInterval)
@@ -554,64 +585,69 @@ static int levelGoal = 0;
                     _timeSinceAppear = 0.0f;
                     
                 }
+                //remove floating woods continuously some time after a new one spawned
                 if(_timeSinceAppear > (double)woodInterval*2){
-                    if(_floatingTools != nil && [_floatingTools count] > 0) {
-                        CCNode *wood = [_floatingTools firstObject];
+                    if(_floatingWoods) {
+                        CCNode *wood = [_floatingWoods firstObject];
                         [_contentNode removeChild:wood];
-                        //[_movingNode addChild:shark];
-                        //[_floatingWoodNode removeChild:wood];
-                        [_floatingTools removeObject:wood];
+                        [_floatingWoods removeObject:wood];
                     }
                 }
                 /*
-                if ([_floatingTools count]<=5)
+                if(_timeSinceNotSafe > ((float)30/levelSpeed))
                 {
-                    [self addWood];
-                }
-                if ([_floatingTools count]>8)
-                {
-                    [self removeFloatingWood];
+                    _character.physicsBody.affectedByGravity = TRUE;
+                    _falling = TRUE;
                 }*/
-            }
             
         }
         @catch(NSException* ex)
         {
             
-            }
-    }
-    else if(!_gameOver){
-        //the character is now in danger status
-        if(_character.position.y<30.f)
-        {
-            [self gameOver:0];
         }
+    }
+    else if(_falling){
+        
     }
 }
 
 -(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair hero:(CCSprite*)hero enemy:(CCNode*)enemy {
-    CCLOG(@"EATEN");
+    //CCLOG(@"EATEN");
     //implement effect of killed by enemies
-    [self gameOver:1];
+    if(_distance > levelGoal){
+        [self gameOver:2];
+    }
+    else{
+        [self gameOver:1];
+    }
     return TRUE;
 }
 
 -(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair tool:(CCSprite *)tool enemy:(CCNode*)enemy {
-    CCLOG(@"Overlap");
+    //CCLOG(@"Overlap");
     [self toolDestroyed:tool];
     return TRUE;
 }
 -(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair enemy:(CCNode *)enemy weapon:(CCSprite*)weapon {
-    CCLOG(@"Kill");
+    //CCLOG(@"Kill");
     [self enemyKilled:enemy];
     return TRUE;
 }
 
 -(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair hero:(CCSprite *)hero tool:(CCSprite*)tool {
-    _toolCount += 1;
-    CCLOG(@"SAFE %d", _toolCount);
-    //[self showScore];
+    _safeCount += 1;
+    CCLOG(@"SAFE %d", _safeCount);
+    _safe = TRUE;
     return TRUE;
+}
+
+- (void)ccPhysicsCollisionSeparate:(CCPhysicsCollisionPair*)pair hero:(CCSprite *)hero tool:(CCSprite*)tool {
+    _apartCount += 1;
+    CCLOG(@"APART %d", _apartCount);
+    if(_apartCount >= _safeCount){
+        _safe = FALSE;
+        _timeSinceNotSafe = 0.0f;
+    }
 }
 
 - (void)toolDestroyed:(CCSprite *)tool {
@@ -623,25 +659,23 @@ static int levelGoal = 0;
     [tool.parent addChild:explosion];
     // make the particle effect clean itself up, once it is completed
     explosion.autoRemoveOnFinish = YES;
-    //different strategies for tools in or not in _tools!!!!!!!!!!!!!!!!!
-    if([_tools containsObject:tool]){
-        [_tools removeObject:tool];
-        _prevTool = [_tools lastObject];
-    }
     [tool removeFromParent];
+    [_floatingWoods removeObject:tool];
     
 }
 - (void)enemyKilled:(CCNode *)enemy {
+    [self configureSystemSound:1];
+    [self playSystemSound];
     // load particle effect
     CCParticleSystem *explosion = (CCParticleSystem *)[CCBReader load:@"EnemyKilled"];
-    // place the particle effect on the wood position
+    // place the particle effect on the enemy position
     explosion.position = enemy.position;
-    // add the particle effect to the same node the wood is on
+    // add the particle effect to the same node the enemy is on
     [enemy.parent addChild:explosion];
     // make the particle effect clean itself up, once it is completed
     explosion.autoRemoveOnFinish = YES;
     
-    // finally, remove the destroyed seal
+    // finally, remove the destroyed enemy
     [enemy removeFromParent];
     [_enemies removeObject:enemy];
 }
@@ -649,30 +683,94 @@ static int levelGoal = 0;
 #pragma mark - Level completion
 
 - (void)loadNextLevel {
-    CCLOG(@"next level");
+    [self configureSystemSound:6];
+    [self playSystemSound];
+    //CCLOG(@"next level");
     
     selectedLevel = _loadedLevel.nextLevelName;
     
     CCScene *nextScene = nil;
-    CCLOG(@"bp1");
+    //CCLOG(@"bp1");
     if (selectedLevel) {
         nextScene = [CCBReader loadAsScene:@"GameMechanics"];
     } else {
         selectedLevel = kFirstLevel;
         nextScene = [CCBReader loadAsScene:@"MainScene"];
     }
-    CCLOG(@"bp2");
+    //CCLOG(@"bp2");
     CCTransition *transition = [CCTransition transitionFadeWithDuration:0.8f];
     [[CCDirector sharedDirector] presentScene:nextScene withTransition:transition];
 }
 
 
 -(void)backToHome {
+    [self configureSystemSound:6];
+    [self playSystemSound];
     CCScene *scene = [CCBReader loadAsScene:@"MainScene"];
     //[[CCDirector sharedDirector] replaceScene:scene];
     CCTransition *transition = [CCTransition transitionFadeWithDuration:0.8f];
     [[CCDirector sharedDirector] presentScene:scene withTransition:transition];
 }
+
+
+- (void)playSystemSound {
+    CCLOG(@"enter play");
+    AudioServicesPlaySystemSound(self.actionSound);
+    CCLOG(@"finish play");
+}
+
+- (void)configureSystemSound:(int) actionType {
+    // This is the simplest way to play a sound.
+    // But note with System Sound services you can only use:
+    // File Formats (a.k.a. audio containers or extensions): CAF, AIF, WAV
+    // Data Formats (a.k.a. audio encoding): linear PCM (such as LEI16) or IMA4
+    // Sounds must be 30 sec or less
+    // And only one sound plays at a time!
+    CCLOG(@"enter config");
+    NSString *audioPath;
+    if(actionType==0){
+        CCLOG(@"enter blop");
+        audioPath = [[NSBundle mainBundle] pathForResource:@"Blop" ofType:@"wav"];
+    }
+    else if(actionType==1){
+        audioPath = [[NSBundle mainBundle] pathForResource:@"Stab" ofType:@"wav"];
+    }
+    else if(actionType==2){
+        audioPath = [[NSBundle mainBundle] pathForResource:@"Jump" ofType:@"wav"];
+    }
+    else if(actionType==3){
+        audioPath = [[NSBundle mainBundle] pathForResource:@"Groan" ofType:@"wav"];
+    }
+    else if(actionType==4){
+        audioPath = [[NSBundle mainBundle] pathForResource:@"Water" ofType:@"wav"];
+    }
+    else if(actionType==5){
+        audioPath = [[NSBundle mainBundle] pathForResource:@"Whistling" ofType:@"wav"];
+    }
+    else{
+        audioPath = [[NSBundle mainBundle] pathForResource:@"Button" ofType:@"wav"];
+    }
+    NSURL *audioURL = [NSURL fileURLWithPath:audioPath];
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)audioURL, &_actionSound);
+}
+
+-(void) shareToFacebook {
+    FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+    
+    // this should link to FB page for your app or AppStore link if published
+    content.contentURL = [NSURL URLWithString:@"https://www.facebook.com/makeschool"];
+    // URL of image to be displayed alongside post
+    content.imageURL = [NSURL URLWithString:@"https://raw.githubusercontent.com/LollipopLollipop/AdventurerWoodie/master/FBsharingImg.png"];
+    // title of post
+    content.contentTitle = [NSString stringWithFormat:@"I just completed level %d at Adventure Woodie! Come to join me!", levelNum];
+    // description/body of post
+    content.contentDescription = @"Check out the crazy adventure with Mr.Woodie.";
+    
+    [FBSDKShareDialog showFromViewController:[CCDirector sharedDirector]
+                                 withContent:content
+                                    delegate:nil];
+}
+
 
 
 @end

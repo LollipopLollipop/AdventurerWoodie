@@ -62,7 +62,6 @@
 			<key>collisionMask</key>
 			<array>
 				<string>enemy</string>
-				<string>hero</string>
 			</array>
 			<key>collisionType</key>
 			<string>tool</string>
@@ -83,32 +82,32 @@
 					<real>1.6484375</real>
 				</array>
 				<array>
-					<real>1.8125</real>
-					<real>36.0546875</real>
+					<real>0.859375</real>
+					<real>29.59375</real>
 				</array>
 				<array>
-					<real>38.046875</real>
-					<real>36.2734375</real>
+					<real>30.1796875</real>
+					<real>30.2890625</real>
 				</array>
 				<array>
-					<real>38.828125</real>
-					<real>1.4921875</real>
+					<real>29.9140625</real>
+					<real>1.70703125</real>
 				</array>
 			</array>
 			<key>polygons</key>
 			<array>
 				<array>
 					<array>
-						<real>38.828125</real>
-						<real>1.4921875</real>
+						<real>29.9140625</real>
+						<real>1.70703125</real>
 					</array>
 					<array>
-						<real>38.046875</real>
-						<real>36.2734375</real>
+						<real>30.1796875</real>
+						<real>30.2890625</real>
 					</array>
 					<array>
-						<real>1.8125</real>
-						<real>36.0546875</real>
+						<real>0.859375</real>
+						<real>29.59375</real>
 					</array>
 					<array>
 						<real>1.7890625</real>

@@ -232,8 +232,6 @@
 						<array/>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
@@ -279,50 +277,40 @@
 			<key>points</key>
 			<array>
 				<array>
-					<real>-44.3125</real>
-					<real>-18.3828125</real>
+					<real>-55.4140625</real>
+					<real>-6.46484375</real>
 				</array>
 				<array>
-					<real>-12.57421875</real>
-					<real>5.28125</real>
+					<real>-16.203125</real>
+					<real>15.76953125</real>
 				</array>
 				<array>
-					<real>27.38671875</real>
-					<real>54.52734375</real>
+					<real>34.04296875</real>
+					<real>13.89453125</real>
 				</array>
 				<array>
-					<real>18.96484375</real>
-					<real>-49.953125</real>
+					<real>-6.04296875</real>
+					<real>-22.96875</real>
 				</array>
 			</array>
 			<key>polygons</key>
 			<array>
 				<array>
 					<array>
-						<real>18.96484375</real>
-						<real>-49.953125</real>
+						<real>-6.04296875</real>
+						<real>-22.96875</real>
 					</array>
 					<array>
-						<real>27.38671875</real>
-						<real>54.52734375</real>
+						<real>34.04296875</real>
+						<real>13.89453125</real>
 					</array>
 					<array>
-						<real>-12.57421875</real>
-						<real>5.28125</real>
-					</array>
-				</array>
-				<array>
-					<array>
-						<real>-12.57421875</real>
-						<real>5.28125</real>
+						<real>-16.203125</real>
+						<real>15.76953125</real>
 					</array>
 					<array>
-						<real>-44.3125</real>
-						<real>-18.3828125</real>
-					</array>
-					<array>
-						<real>18.96484375</real>
-						<real>-49.953125</real>
+						<real>-55.4140625</real>
+						<real>-6.46484375</real>
 					</array>
 				</array>
 			</array>
@@ -389,6 +377,8 @@
 				</array>
 			</dict>
 		</array>
+		<key>selected</key>
+		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>

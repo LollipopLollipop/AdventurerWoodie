@@ -9,11 +9,11 @@
 #import "CCNode.h"
 #import "Wood.h"
 #import "Level.h"
-#import "LevelSetting.h"
-
 
 
 @interface GameMechanics : CCNode <CCPhysicsCollisionDelegate>
+
+@property (assign) SystemSoundID actionSound;
 
 - (void)placeTool;//abstract
 - (void)applyWeapon;

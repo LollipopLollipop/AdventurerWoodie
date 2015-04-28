@@ -2527,9 +2527,9 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>4.5453124046325684</real>
+			<real>0.0</real>
 			<key>position</key>
-			<real>7.5999999046325684</real>
+			<real>0.26666668057441711</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

@@ -97,15 +97,20 @@
 		F40E8C6D1ABDCF7300566710 /* GameMechanics.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E8C6C1ABDCF7300566710 /* GameMechanics.m */; };
 		F43B17DD1AD314D000E19D7F /* Level.m in Sources */ = {isa = PBXBuildFile; fileRef = F43B17DC1AD314D000E19D7F /* Level.m */; };
 		F445B5851AEEBE850088A285 /* Instructions.m in Sources */ = {isa = PBXBuildFile; fileRef = F445B5841AEEBE850088A285 /* Instructions.m */; };
+		F445B59B1AEEE12A0088A285 /* Blop.wav in Resources */ = {isa = PBXBuildFile; fileRef = F445B5951AEEE1290088A285 /* Blop.wav */; };
+		F445B59C1AEEE12A0088A285 /* Groan.wav in Resources */ = {isa = PBXBuildFile; fileRef = F445B5961AEEE1290088A285 /* Groan.wav */; };
+		F445B59D1AEEE12A0088A285 /* Jump.wav in Resources */ = {isa = PBXBuildFile; fileRef = F445B5971AEEE1290088A285 /* Jump.wav */; };
+		F445B59E1AEEE12A0088A285 /* Stab.wav in Resources */ = {isa = PBXBuildFile; fileRef = F445B5981AEEE1290088A285 /* Stab.wav */; };
+		F445B59F1AEEE12A0088A285 /* Water.wav in Resources */ = {isa = PBXBuildFile; fileRef = F445B5991AEEE1290088A285 /* Water.wav */; };
+		F445B5A01AEEE12A0088A285 /* Whistling.wav in Resources */ = {isa = PBXBuildFile; fileRef = F445B59A1AEEE1290088A285 /* Whistling.wav */; };
+		F445B5A21AEEE4160088A285 /* Button.wav in Resources */ = {isa = PBXBuildFile; fileRef = F445B5A11AEEE4160088A285 /* Button.wav */; };
 		F4629CE01ACF44C70076B78E /* Weapon.m in Sources */ = {isa = PBXBuildFile; fileRef = F4629CDF1ACF44C70076B78E /* Weapon.m */; };
-		F48B51E01AEDEE1800CF8762 /* Blop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F48B51DB1AEDEE1800CF8762 /* Blop.mp3 */; };
-		F48B51E11AEDEE1800CF8762 /* Groan.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F48B51DC1AEDEE1800CF8762 /* Groan.mp3 */; };
-		F48B51E21AEDEE1800CF8762 /* Jab.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F48B51DD1AEDEE1800CF8762 /* Jab.mp3 */; };
-		F48B51E31AEDEE1800CF8762 /* Water.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F48B51DE1AEDEE1800CF8762 /* Water.mp3 */; };
-		F48B51E41AEDEE1800CF8762 /* Whistling.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F48B51DF1AEDEE1800CF8762 /* Whistling.mp3 */; };
 		F4A6B9781AEAE5DF00B9E5FE /* PopupAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F4A6B9771AEAE5DF00B9E5FE /* PopupAlert.m */; };
-		F4C26E8C1AD979ED00AD2C2A /* LevelSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C26E8B1AD979ED00AD2C2A /* LevelSetting.m */; };
 		F4E051F11A9BDFE00013B488 /* Wood.m in Sources */ = {isa = PBXBuildFile; fileRef = F4E051F01A9BDFE00013B488 /* Wood.m */; };
+		F4F7FAFC1AEF4B60008616E2 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F7FAFB1AEF4B60008616E2 /* Bolts.framework */; };
+		F4F7FB001AEF4B69008616E2 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F7FAFD1AEF4B69008616E2 /* FBSDKCoreKit.framework */; };
+		F4F7FB011AEF4B69008616E2 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F7FAFE1AEF4B69008616E2 /* FBSDKLoginKit.framework */; };
+		F4F7FB021AEF4B69008616E2 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F7FAFF1AEF4B69008616E2 /* FBSDKShareKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -231,19 +236,23 @@
 		F43B17DC1AD314D000E19D7F /* Level.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Level.m; path = Source/Level.m; sourceTree = "<group>"; };
 		F445B5831AEEBE850088A285 /* Instructions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Instructions.h; path = Source/Instructions.h; sourceTree = "<group>"; };
 		F445B5841AEEBE850088A285 /* Instructions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instructions.m; path = Source/Instructions.m; sourceTree = "<group>"; };
+		F445B5951AEEE1290088A285 /* Blop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Blop.wav; path = Audio/Blop.wav; sourceTree = SOURCE_ROOT; };
+		F445B5961AEEE1290088A285 /* Groan.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Groan.wav; path = Audio/Groan.wav; sourceTree = SOURCE_ROOT; };
+		F445B5971AEEE1290088A285 /* Jump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Jump.wav; path = Audio/Jump.wav; sourceTree = SOURCE_ROOT; };
+		F445B5981AEEE1290088A285 /* Stab.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Stab.wav; path = Audio/Stab.wav; sourceTree = SOURCE_ROOT; };
+		F445B5991AEEE1290088A285 /* Water.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Water.wav; path = Audio/Water.wav; sourceTree = SOURCE_ROOT; };
+		F445B59A1AEEE1290088A285 /* Whistling.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Whistling.wav; path = Audio/Whistling.wav; sourceTree = SOURCE_ROOT; };
+		F445B5A11AEEE4160088A285 /* Button.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Button.wav; path = Audio/Button.wav; sourceTree = SOURCE_ROOT; };
 		F4629CDE1ACF44C70076B78E /* Weapon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Weapon.h; path = Source/Weapon.h; sourceTree = "<group>"; };
 		F4629CDF1ACF44C70076B78E /* Weapon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weapon.m; path = Source/Weapon.m; sourceTree = "<group>"; };
-		F48B51DB1AEDEE1800CF8762 /* Blop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Blop.mp3; path = ../Asset/Audio/Blop.mp3; sourceTree = "<group>"; };
-		F48B51DC1AEDEE1800CF8762 /* Groan.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Groan.mp3; path = ../Asset/Audio/Groan.mp3; sourceTree = "<group>"; };
-		F48B51DD1AEDEE1800CF8762 /* Jab.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Jab.mp3; path = ../Asset/Audio/Jab.mp3; sourceTree = "<group>"; };
-		F48B51DE1AEDEE1800CF8762 /* Water.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Water.mp3; path = ../Asset/Audio/Water.mp3; sourceTree = "<group>"; };
-		F48B51DF1AEDEE1800CF8762 /* Whistling.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Whistling.mp3; path = ../Asset/Audio/Whistling.mp3; sourceTree = "<group>"; };
 		F4A6B9761AEAE5DF00B9E5FE /* PopupAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopupAlert.h; path = Source/PopupAlert.h; sourceTree = "<group>"; };
 		F4A6B9771AEAE5DF00B9E5FE /* PopupAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PopupAlert.m; path = Source/PopupAlert.m; sourceTree = "<group>"; };
-		F4C26E8A1AD979ED00AD2C2A /* LevelSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LevelSetting.h; path = Source/LevelSetting.h; sourceTree = "<group>"; };
-		F4C26E8B1AD979ED00AD2C2A /* LevelSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LevelSetting.m; path = Source/LevelSetting.m; sourceTree = "<group>"; };
 		F4E051EF1A9BDFE00013B488 /* Wood.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wood.h; path = Source/Wood.h; sourceTree = "<group>"; };
 		F4E051F01A9BDFE00013B488 /* Wood.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Wood.m; path = Source/Wood.m; sourceTree = "<group>"; };
+		F4F7FAFB1AEF4B60008616E2 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		F4F7FAFD1AEF4B69008616E2 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		F4F7FAFE1AEF4B69008616E2 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		F4F7FAFF1AEF4B69008616E2 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -287,6 +296,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4F7FB001AEF4B69008616E2 /* FBSDKCoreKit.framework in Frameworks */,
+				F4F7FB011AEF4B69008616E2 /* FBSDKLoginKit.framework in Frameworks */,
+				F4F7FB021AEF4B69008616E2 /* FBSDKShareKit.framework in Frameworks */,
+				F4F7FAFC1AEF4B60008616E2 /* Bolts.framework in Frameworks */,
 				7A97911819E631CD001FFC4D /* libcocos2d.a in Frameworks */,
 				8392007A18EE8E3300B6C429 /* GLKit.framework in Frameworks */,
 				B77F1B3217B978D7009739AE /* QuartzCore.framework in Frameworks */,
@@ -481,8 +494,6 @@
 				F40E8C6C1ABDCF7300566710 /* GameMechanics.m */,
 				F43B17DB1AD314D000E19D7F /* Level.h */,
 				F43B17DC1AD314D000E19D7F /* Level.m */,
-				F4C26E8A1AD979ED00AD2C2A /* LevelSetting.h */,
-				F4C26E8B1AD979ED00AD2C2A /* LevelSetting.m */,
 				F4E051EF1A9BDFE00013B488 /* Wood.h */,
 				F4E051F01A9BDFE00013B488 /* Wood.m */,
 			);
@@ -535,6 +546,10 @@
 		B77F1B3017B978D7009739AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F4F7FAFD1AEF4B69008616E2 /* FBSDKCoreKit.framework */,
+				F4F7FAFE1AEF4B69008616E2 /* FBSDKLoginKit.framework */,
+				F4F7FAFF1AEF4B69008616E2 /* FBSDKShareKit.framework */,
+				F4F7FAFB1AEF4B60008616E2 /* Bolts.framework */,
 				BC5399D31A44DCC90063F482 /* AndroidKit.framework */,
 				BC5399D41A44DCC90063F482 /* CoreJava.framework */,
 				BC5399D51A44DCC90063F482 /* GLActivityKit.framework */,
@@ -563,6 +578,13 @@
 		B77F1B4617B978D7009739AE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F445B5A11AEEE4160088A285 /* Button.wav */,
+				F445B5951AEEE1290088A285 /* Blop.wav */,
+				F445B5961AEEE1290088A285 /* Groan.wav */,
+				F445B5971AEEE1290088A285 /* Jump.wav */,
+				F445B5981AEEE1290088A285 /* Stab.wav */,
+				F445B5991AEEE1290088A285 /* Water.wav */,
+				F445B59A1AEEE1290088A285 /* Whistling.wav */,
 				7A40366119DDF8C2007B6E8F /* Platforms */,
 				5B12100D197483EE004C1E1D /* res */,
 				B73789911807667A0076A88C /* Icons */,
@@ -576,11 +598,6 @@
 		B77F1CCF17B978D8009739AE /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F48B51DB1AEDEE1800CF8762 /* Blop.mp3 */,
-				F48B51DC1AEDEE1800CF8762 /* Groan.mp3 */,
-				F48B51DD1AEDEE1800CF8762 /* Jab.mp3 */,
-				F48B51DE1AEDEE1800CF8762 /* Water.mp3 */,
-				F48B51DF1AEDEE1800CF8762 /* Whistling.mp3 */,
 				7A40365D19DDF896007B6E8F /* Platforms */,
 				7AFCD5DD19E9BDC200BCCCDA /* Bridging-Header.h */,
 				7AFCD5DB19E9BD9F00BCCCDA /* cocos2d.h */,
@@ -779,20 +796,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				B71F5919188484E7003F4D28 /* Settings.png in Resources */,
-				F48B51E11AEDEE1800CF8762 /* Groan.mp3 in Resources */,
-				F48B51E31AEDEE1800CF8762 /* Water.mp3 in Resources */,
+				F445B59B1AEEE12A0088A285 /* Blop.wav in Resources */,
+				F445B5A21AEEE4160088A285 /* Button.wav in Resources */,
 				B7378978180762440076A88C /* Default@2x.png in Resources */,
-				F48B51E41AEDEE1800CF8762 /* Whistling.mp3 in Resources */,
 				B71F5914188484E7003F4D28 /* iPad@2x.png in Resources */,
-				F48B51E01AEDEE1800CF8762 /* Blop.mp3 in Resources */,
+				F445B59D1AEEE12A0088A285 /* Jump.wav in Resources */,
+				F445B5A01AEEE12A0088A285 /* Whistling.wav in Resources */,
 				B71F5913188484E7003F4D28 /* iPad.png in Resources */,
-				F48B51E21AEDEE1800CF8762 /* Jab.mp3 in Resources */,
 				B71F5912188484E7003F4D28 /* iPad-old@2x.png in Resources */,
 				B71F5916188484E7003F4D28 /* iPhone-old@2x.png in Resources */,
+				F445B59E1AEEE12A0088A285 /* Stab.wav in Resources */,
 				B737893B180761570076A88C /* Published-iOS in Resources */,
 				B71F591A188484E7003F4D28 /* Settings@2x.png in Resources */,
 				B7378976180762440076A88C /* Default-Landscape~ipad.png in Resources */,
+				F445B59F1AEEE12A0088A285 /* Water.wav in Resources */,
 				B71F5915188484E7003F4D28 /* iPhone-old.png in Resources */,
+				F445B59C1AEEE12A0088A285 /* Groan.wav in Resources */,
 				B71F5917188484E7003F4D28 /* iPhone.png in Resources */,
 				B7378975180762440076A88C /* Default-568h@2x.png in Resources */,
 				B71F5918188484E7003F4D28 /* iPhone@2x.png in Resources */,
@@ -881,7 +900,6 @@
 				5B121038197487F2004C1E1D /* AppDelegate.m in Sources */,
 				F40E8C6D1ABDCF7300566710 /* GameMechanics.m in Sources */,
 				F445B5851AEEBE850088A285 /* Instructions.m in Sources */,
-				F4C26E8C1AD979ED00AD2C2A /* LevelSetting.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1162,11 +1180,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/Prefix.pch;
@@ -1197,11 +1220,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/Prefix.pch;
 				HEADER_SEARCH_PATHS = (

@@ -62,7 +62,6 @@
 			<key>collisionMask</key>
 			<array>
 				<string>enemy</string>
-				<string>hero</string>
 			</array>
 			<key>collisionType</key>
 			<string>tool</string>
@@ -83,32 +82,32 @@
 					<real>1.6484375</real>
 				</array>
 				<array>
-					<real>1.484375</real>
-					<real>20.4921875</real>
+					<real>2.08984375</real>
+					<real>29.6875</real>
 				</array>
 				<array>
-					<real>114.6328125</real>
-					<real>21.2265625</real>
+					<real>43.86328125</real>
+					<real>29.85546875</real>
 				</array>
 				<array>
-					<real>114.671875</real>
-					<real>3.203125</real>
+					<real>44.55859375</real>
+					<real>1.41015625</real>
 				</array>
 			</array>
 			<key>polygons</key>
 			<array>
 				<array>
 					<array>
-						<real>114.671875</real>
-						<real>3.203125</real>
+						<real>44.55859375</real>
+						<real>1.41015625</real>
 					</array>
 					<array>
-						<real>114.6328125</real>
-						<real>21.2265625</real>
+						<real>43.86328125</real>
+						<real>29.85546875</real>
 					</array>
 					<array>
-						<real>1.484375</real>
-						<real>20.4921875</real>
+						<real>2.08984375</real>
+						<real>29.6875</real>
 					</array>
 					<array>
 						<real>1.7890625</real>
@@ -173,7 +172,7 @@
 				<key>value</key>
 				<array>
 					<string></string>
-					<string>object_physics-game-wood/TD11.png</string>
+					<string>object_physics-game-wood/TD2.png</string>
 				</array>
 			</dict>
 			<dict>
@@ -209,6 +208,8 @@
 				<array/>
 			</dict>
 		</array>
+		<key>selected</key>
+		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>
