@@ -3,7 +3,12 @@
 
 @implementation MainScene
 
+Instructions    *curWindow;
 - (void)play {
+    if(curWindow != nil){
+        [self removeChild:curWindow];
+    }
+    curWindow = nil;
     [self configureSystemSound:0];
     [self playSystemSound];
     CCScene *gameplayScene = [CCBReader loadAsScene:@"GameMechanics"];
@@ -13,34 +18,64 @@
 }
 
 - (void)showInstruction1 {
+    if(curWindow != nil){
+        [self removeChild:curWindow];
+    }
     [self configureSystemSound:0];
     [self playSystemSound];
     Instructions *insWindow = (Instructions *)[CCBReader load:@"InstructionWindow1" owner:self];
     insWindow.positionType = CCPositionTypeNormalized;
     insWindow.position = ccp(0.5, 0.5);
+    curWindow = insWindow;
     [self addChild:insWindow];
 }
 
 -(void)showInstruction2 {
+    if(curWindow != nil){
+        [self removeChild:curWindow];
+    }
     [self configureSystemSound:0];
     [self playSystemSound];
     Instructions *insWindow = (Instructions *)[CCBReader load:@"InstructionWindow2" owner:self];
     insWindow.positionType = CCPositionTypeNormalized;
     insWindow.position = ccp(0.5, 0.5);
+    curWindow = insWindow;
     [self addChild:insWindow];
 }
 
 -(void)showInstruction3 {
+    if(curWindow != nil){
+        [self removeChild:curWindow];
+    }
     [self configureSystemSound:0];
     [self playSystemSound];
     Instructions *insWindow = (Instructions *)[CCBReader load:@"InstructionWindow3" owner:self];
     insWindow.positionType = CCPositionTypeNormalized;
     insWindow.position = ccp(0.5, 0.5);
+    curWindow = insWindow;
+    [self addChild:insWindow];
+    
+}
+
+-(void)showInstruction4 {
+    if(curWindow != nil){
+        [self removeChild:curWindow];
+    }
+    [self configureSystemSound:0];
+    [self playSystemSound];
+    Instructions *insWindow = (Instructions *)[CCBReader load:@"InstructionWindow4" owner:self];
+    insWindow.positionType = CCPositionTypeNormalized;
+    insWindow.position = ccp(0.5, 0.5);
+    curWindow = insWindow;
     [self addChild:insWindow];
     
 }
 
 -(void)backToHome {
+    if(curWindow != nil){
+        [self removeChild:curWindow];
+    }
+    curWindow = nil;
     [self configureSystemSound:0];
     [self playSystemSound];
     CCScene *scene = [CCBReader loadAsScene:@"MainScene"];

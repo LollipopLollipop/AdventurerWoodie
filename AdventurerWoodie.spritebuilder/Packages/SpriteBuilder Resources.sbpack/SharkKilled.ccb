@@ -318,6 +318,8 @@
 				<string>Enemies/blood_drop.png</string>
 			</dict>
 		</array>
+		<key>selected</key>
+		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>

@@ -94,6 +94,7 @@
 		BC5399DA1A44DCC90063F482 /* GLActivityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC5399D51A44DCC90063F482 /* GLActivityKit.framework */; };
 		BC5399DB1A44DCC90063F482 /* JavaFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC5399D61A44DCC90063F482 /* JavaFoundation.framework */; };
 		BC5399DC1A44DCC90063F482 /* JavaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC5399D71A44DCC90063F482 /* JavaKit.framework */; };
+		F4004A301AF5D29F0021EF4D /* FBsharingImg.png in Resources */ = {isa = PBXBuildFile; fileRef = F4004A2F1AF5D29F0021EF4D /* FBsharingImg.png */; };
 		F40E8C6D1ABDCF7300566710 /* GameMechanics.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E8C6C1ABDCF7300566710 /* GameMechanics.m */; };
 		F43B17DD1AD314D000E19D7F /* Level.m in Sources */ = {isa = PBXBuildFile; fileRef = F43B17DC1AD314D000E19D7F /* Level.m */; };
 		F445B5851AEEBE850088A285 /* Instructions.m in Sources */ = {isa = PBXBuildFile; fileRef = F445B5841AEEBE850088A285 /* Instructions.m */; };
@@ -106,7 +107,6 @@
 		F445B5A21AEEE4160088A285 /* Button.wav in Resources */ = {isa = PBXBuildFile; fileRef = F445B5A11AEEE4160088A285 /* Button.wav */; };
 		F4629CE01ACF44C70076B78E /* Weapon.m in Sources */ = {isa = PBXBuildFile; fileRef = F4629CDF1ACF44C70076B78E /* Weapon.m */; };
 		F4A6B9781AEAE5DF00B9E5FE /* PopupAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F4A6B9771AEAE5DF00B9E5FE /* PopupAlert.m */; };
-		F4E051F11A9BDFE00013B488 /* Wood.m in Sources */ = {isa = PBXBuildFile; fileRef = F4E051F01A9BDFE00013B488 /* Wood.m */; };
 		F4F7FAFC1AEF4B60008616E2 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F7FAFB1AEF4B60008616E2 /* Bolts.framework */; };
 		F4F7FB001AEF4B69008616E2 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F7FAFD1AEF4B69008616E2 /* FBSDKCoreKit.framework */; };
 		F4F7FB011AEF4B69008616E2 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F7FAFE1AEF4B69008616E2 /* FBSDKLoginKit.framework */; };
@@ -230,6 +230,7 @@
 		BC5399D61A44DCC90063F482 /* JavaFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaFoundation.framework; path = "../../../../Library/Application Support/Developer/Shared/Xcode/Platforms/Android.platform/Developer/SDKs/SBAndroid.sdk/System/Library/Frameworks/JavaFoundation.framework"; sourceTree = "<group>"; };
 		BC5399D71A44DCC90063F482 /* JavaKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaKit.framework; path = "../../../../Library/Application Support/Developer/Shared/Xcode/Platforms/Android.platform/Developer/SDKs/SBAndroid.sdk/System/Library/Frameworks/JavaKit.framework"; sourceTree = "<group>"; };
 		D352B48019EC608A00829775 /* MetalShaders */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MetalShaders; path = Source/MetalShaders; sourceTree = "<group>"; };
+		F4004A2F1AF5D29F0021EF4D /* FBsharingImg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = FBsharingImg.png; path = ../../../FBsharingImg.png; sourceTree = "<group>"; };
 		F40E8C6B1ABDCF7300566710 /* GameMechanics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameMechanics.h; path = Source/GameMechanics.h; sourceTree = "<group>"; };
 		F40E8C6C1ABDCF7300566710 /* GameMechanics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameMechanics.m; path = Source/GameMechanics.m; sourceTree = "<group>"; };
 		F43B17DB1AD314D000E19D7F /* Level.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Level.h; path = Source/Level.h; sourceTree = "<group>"; };
@@ -247,8 +248,6 @@
 		F4629CDF1ACF44C70076B78E /* Weapon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Weapon.m; path = Source/Weapon.m; sourceTree = "<group>"; };
 		F4A6B9761AEAE5DF00B9E5FE /* PopupAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopupAlert.h; path = Source/PopupAlert.h; sourceTree = "<group>"; };
 		F4A6B9771AEAE5DF00B9E5FE /* PopupAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PopupAlert.m; path = Source/PopupAlert.m; sourceTree = "<group>"; };
-		F4E051EF1A9BDFE00013B488 /* Wood.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wood.h; path = Source/Wood.h; sourceTree = "<group>"; };
-		F4E051F01A9BDFE00013B488 /* Wood.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Wood.m; path = Source/Wood.m; sourceTree = "<group>"; };
 		F4F7FAFB1AEF4B60008616E2 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		F4F7FAFD1AEF4B69008616E2 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		F4F7FAFE1AEF4B69008616E2 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
@@ -481,9 +480,9 @@
 			isa = PBXGroup;
 			children = (
 				F4A6B9761AEAE5DF00B9E5FE /* PopupAlert.h */,
+				F4A6B9771AEAE5DF00B9E5FE /* PopupAlert.m */,
 				F445B5831AEEBE850088A285 /* Instructions.h */,
 				F445B5841AEEBE850088A285 /* Instructions.m */,
-				F4A6B9771AEAE5DF00B9E5FE /* PopupAlert.m */,
 				7A40362019DDEF0D007B6E8F /* Platforms */,
 				B7378992180767190076A88C /* MainScene.h */,
 				B7378993180767190076A88C /* MainScene.m */,
@@ -494,8 +493,6 @@
 				F40E8C6C1ABDCF7300566710 /* GameMechanics.m */,
 				F43B17DB1AD314D000E19D7F /* Level.h */,
 				F43B17DC1AD314D000E19D7F /* Level.m */,
-				F4E051EF1A9BDFE00013B488 /* Wood.h */,
-				F4E051F01A9BDFE00013B488 /* Wood.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -578,6 +575,7 @@
 		B77F1B4617B978D7009739AE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F4004A2F1AF5D29F0021EF4D /* FBsharingImg.png */,
 				F445B5A11AEEE4160088A285 /* Button.wav */,
 				F445B5951AEEE1290088A285 /* Blop.wav */,
 				F445B5961AEEE1290088A285 /* Groan.wav */,
@@ -809,6 +807,7 @@
 				B737893B180761570076A88C /* Published-iOS in Resources */,
 				B71F591A188484E7003F4D28 /* Settings@2x.png in Resources */,
 				B7378976180762440076A88C /* Default-Landscape~ipad.png in Resources */,
+				F4004A301AF5D29F0021EF4D /* FBsharingImg.png in Resources */,
 				F445B59F1AEEE12A0088A285 /* Water.wav in Resources */,
 				B71F5915188484E7003F4D28 /* iPhone-old.png in Resources */,
 				F445B59C1AEEE12A0088A285 /* Groan.wav in Resources */,
@@ -891,7 +890,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4E051F11A9BDFE00013B488 /* Wood.m in Sources */,
 				F4629CE01ACF44C70076B78E /* Weapon.m in Sources */,
 				B73789871807631A0076A88C /* main.m in Sources */,
 				F4A6B9781AEAE5DF00B9E5FE /* PopupAlert.m in Sources */,

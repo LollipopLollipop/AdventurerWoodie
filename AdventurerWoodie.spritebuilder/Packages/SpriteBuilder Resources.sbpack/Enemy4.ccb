@@ -46,6 +46,88 @@
 				<dict>
 					<key>0</key>
 					<dict>
+						<key>position</key>
+						<dict>
+							<key>keyframes</key>
+							<array>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>position</string>
+									<key>time</key>
+									<real>0.0</real>
+									<key>type</key>
+									<integer>3</integer>
+									<key>value</key>
+									<array>
+										<real>0.0</real>
+										<real>-40</real>
+									</array>
+								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>position</string>
+									<key>time</key>
+									<real>0.3333333432674408</real>
+									<key>type</key>
+									<integer>3</integer>
+									<key>value</key>
+									<array>
+										<real>0.0</real>
+										<real>-20</real>
+									</array>
+								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>position</string>
+									<key>time</key>
+									<real>0.66666668653488159</real>
+									<key>type</key>
+									<integer>3</integer>
+									<key>value</key>
+									<array>
+										<real>0.0</real>
+										<real>0.0</real>
+									</array>
+								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>position</string>
+									<key>time</key>
+									<real>2</real>
+									<key>type</key>
+									<integer>3</integer>
+									<key>value</key>
+									<array>
+										<real>0.0</real>
+										<real>0.0</real>
+									</array>
+								</dict>
+							</array>
+							<key>name</key>
+							<string>position</string>
+							<key>type</key>
+							<integer>3</integer>
+						</dict>
 						<key>rotation</key>
 						<dict>
 							<key>keyframes</key>
@@ -110,6 +192,51 @@
 									<key>value</key>
 									<real>-15</real>
 								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>rotation</string>
+									<key>time</key>
+									<real>1.3333333730697632</real>
+									<key>type</key>
+									<integer>2</integer>
+									<key>value</key>
+									<real>0.0</real>
+								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>rotation</string>
+									<key>time</key>
+									<real>1.6666666269302368</real>
+									<key>type</key>
+									<integer>2</integer>
+									<key>value</key>
+									<real>30</real>
+								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>rotation</string>
+									<key>time</key>
+									<real>2</real>
+									<key>type</key>
+									<integer>2</integer>
+									<key>value</key>
+									<real>0.0</real>
+								</dict>
 							</array>
 							<key>name</key>
 							<string>rotation</string>
@@ -141,6 +268,11 @@
 						<string></string>
 					</dict>
 					<dict>
+						<key>baseValue</key>
+						<array>
+							<real>0.0</real>
+							<real>0.0</real>
+						</array>
 						<key>name</key>
 						<string>position</string>
 						<key>type</key>
@@ -161,8 +293,8 @@
 						<string>Point</string>
 						<key>value</key>
 						<array>
-							<real>0.5</real>
-							<real>0.5</real>
+							<real>0.60000002384185791</real>
+							<real>0.40000000596046448</real>
 						</array>
 					</dict>
 					<dict>
@@ -186,7 +318,7 @@
 						<key>type</key>
 						<string>Degrees</string>
 						<key>value</key>
-						<real>10.5</real>
+						<real>0.0</real>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -261,6 +393,7 @@
 				<string>tool</string>
 				<string>hero</string>
 				<string>weapon</string>
+				<string>station</string>
 			</array>
 			<key>collisionType</key>
 			<string>enemy</string>
@@ -428,13 +561,13 @@
 			<key>chainedSequenceId</key>
 			<integer>0</integer>
 			<key>length</key>
-			<real>1</real>
+			<real>2</real>
 			<key>name</key>
 			<string>Enemy1</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.43333333730697632</real>
+			<real>1.3333333730697632</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

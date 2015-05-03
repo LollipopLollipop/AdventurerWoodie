@@ -652,7 +652,7 @@
 				<key>type</key>
 				<integer>0</integer>
 				<key>value</key>
-				<string>25</string>
+				<string>15</string>
 			</dict>
 			<dict>
 				<key>name</key>
@@ -662,7 +662,7 @@
 				<key>type</key>
 				<integer>0</integer>
 				<key>value</key>
-				<string>8</string>
+				<string>9</string>
 			</dict>
 			<dict>
 				<key>name</key>
@@ -672,7 +672,7 @@
 				<key>type</key>
 				<integer>0</integer>
 				<key>value</key>
-				<string>3</string>
+				<string>2</string>
 			</dict>
 			<dict>
 				<key>name</key>

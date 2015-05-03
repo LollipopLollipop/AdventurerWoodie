@@ -40,7 +40,7 @@
 		<key>children</key>
 		<array/>
 		<key>customClass</key>
-		<string>Wood</string>
+		<string></string>
 		<key>displayName</key>
 		<string>CCSprite</string>
 		<key>memberVarAssignmentName</key>
@@ -62,6 +62,7 @@
 			<key>collisionMask</key>
 			<array>
 				<string>enemy</string>
+				<string>station</string>
 			</array>
 			<key>collisionType</key>
 			<string>tool</string>
