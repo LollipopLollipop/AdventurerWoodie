@@ -7,7 +7,6 @@
 //
 
 #import "CCNode.h"
-#import "Wood.h"
 #import "Level.h"
 
 
