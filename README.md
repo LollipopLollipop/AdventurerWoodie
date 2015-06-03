@@ -1,4 +1,4 @@
 # AdventurerWoodie
 
 
-![image](AdventurerWoodiePoster.pdf)
+![image](AdventurerWoodiePoster.jpg)
