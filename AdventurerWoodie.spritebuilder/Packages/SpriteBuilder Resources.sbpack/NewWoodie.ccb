@@ -16,7 +16,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>1</integer>
+	<integer>0</integer>
 	<key>docDimensionsType</key>
 	<integer>1</integer>
 	<key>fileType</key>
@@ -314,12 +314,12 @@
 			<key>points</key>
 			<array>
 				<array>
-					<real>0.0</real>
-					<real>0.0</real>
+					<real>8.046875</real>
+					<real>-1.484375</real>
 				</array>
 				<array>
-					<real>0.0</real>
-					<real>64</real>
+					<real>7.3515625</real>
+					<real>64.78125</real>
 				</array>
 				<array>
 					<real>75</real>
@@ -342,12 +342,12 @@
 						<real>64</real>
 					</array>
 					<array>
-						<real>0.0</real>
-						<real>64</real>
+						<real>7.3515625</real>
+						<real>64.78125</real>
 					</array>
 					<array>
-						<real>0.0</real>
-						<real>0.0</real>
+						<real>8.046875</real>
+						<real>-1.484375</real>
 					</array>
 				</array>
 			</array>
@@ -518,7 +518,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.26666668057441711</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

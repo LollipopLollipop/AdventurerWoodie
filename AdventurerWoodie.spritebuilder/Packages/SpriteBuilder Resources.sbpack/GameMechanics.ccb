@@ -714,12 +714,12 @@
 									<key>points</key>
 									<array>
 										<array>
-											<real>0.0</real>
-											<real>0.0</real>
+											<real>16.718765258789062</real>
+											<real>0.40625</real>
 										</array>
 										<array>
-											<real>0.0</real>
-											<real>64</real>
+											<real>16.2890625</real>
+											<real>63.9375</real>
 										</array>
 										<array>
 											<real>75</real>
@@ -742,12 +742,12 @@
 												<real>64</real>
 											</array>
 											<array>
-												<real>0.0</real>
-												<real>64</real>
+												<real>16.2890625</real>
+												<real>63.9375</real>
 											</array>
 											<array>
-												<real>0.0</real>
-												<real>0.0</real>
+												<real>16.718765258789062</real>
+												<real>0.40625</real>
 											</array>
 										</array>
 									</array>
@@ -798,6 +798,8 @@
 										<string>NewWoodie.ccb</string>
 									</dict>
 								</array>
+								<key>selected</key>
+								<true/>
 							</dict>
 							<dict>
 								<key>UUID</key>
@@ -860,8 +862,6 @@
 										<string>Station1.ccb</string>
 									</dict>
 								</array>
-								<key>selected</key>
-								<true/>
 							</dict>
 							<dict>
 								<key>UUID</key>

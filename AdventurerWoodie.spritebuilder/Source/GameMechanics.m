@@ -159,7 +159,7 @@ static float longPressThreshold = 0.5f;
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenWidth = screenRect.size.width;
     screenHeight = screenRect.size.height;
-    CCLOG(@"SCREEN SIZE %f", screenWidth);
+    //CCLOG(@"SCREEN SIZE %f", screenWidth);
 }
 
 #pragma mark - Touch Handling
@@ -224,7 +224,7 @@ static float longPressThreshold = 0.5f;
 }
 
 - (void)touchEnded:(CCTouch *)touch withEvent:(CCTouchEvent *)event {
-    CCLOG(@"SINCE TOUCH %f", _sinceTouch);
+    //CCLOG(@"SINCE TOUCH %f", _sinceTouch);
     if(_sinceTouch > longPressThreshold){
         //[self jumpWoodie:_sinceTouch-longPressThreshold];
         _jumpDegree = _sinceTouch-longPressThreshold;
@@ -244,7 +244,7 @@ static float longPressThreshold = 0.5f;
 }
 
 - (void)touchCancelled:(CCTouch *)touch withEvent:(CCTouchEvent *)event {
-    CCLOG(@"SINCE TOUCH %f", _sinceTouch);
+    //CCLOG(@"SINCE TOUCH %f", _sinceTouch);
     if(_sinceTouch > longPressThreshold){
         //[self jumpWoodie:_sinceTouch-longPressThreshold];
         _jumpDegree = _sinceTouch-longPressThreshold;
@@ -267,7 +267,7 @@ static float longPressThreshold = 0.5f;
 #pragma mark - Jump character
 - (void) jumpWoodie{
     if(levelNum >=3){
-    CCLOG(@"JUMP TRIGGERED");
+    //CCLOG(@"JUMP TRIGGERED");
     //trigger jumping animation
     [_character.animationManager runAnimationsForSequenceNamed:@"JumpWoodie"];
     _jumping = TRUE;
@@ -294,16 +294,35 @@ static float longPressThreshold = 0.5f;
 #pragma mark - Apply Dragged Obj
 - (void)placeTool
 {
+    CCLOG(@"START PLACE TOOL");
+    if ( [ _contentNode.children indexOfObject:_dragTool ] == NSNotFound ) {
+        
+        // you can add the code here
+        CCLOG(@"DRAG TOOL IS NO LONGER IN CONTENT NODE...TERMINATE");
+        return;
+    }
+    
     if(CGRectContainsPoint([_prevTool boundingBox], _dragTool.position))
     {
+        CCLOG(@"INSIDE BOUNDING BOX PLACE TOOL STARTS");
         //woods used to build path for Mr.Woodie would no longer be eaten by enemies
-        _dragTool.physicsBody.collisionMask = @[@"hero"];
+        
+        
         _dragTool.physicsBody.sensor = TRUE;
+        _dragTool.physicsBody.collisionMask = @[@"hero"];
+        CCLOG(@"CLEAR COLLISION MASK");
         _dragTool.position = ccp(_prevTool.position.x+(_prevTool.contentSize.width), _prevTool.position.y);
         //update latest wood
+        if(_prevTool == nil){
+            CCLOG(@"YES, PREV TOOL IS NIL");
+        }
+        CCLOG(@"BEFORE ADD THERE IS %lu PATH WOODS", (unsigned long)[_pathWoods count]);
         _prevTool = _dragTool;
+        CCLOG(@"UPDATE PREV TOOL");
         [_pathWoods addObject:_dragTool];
         [_floatingWoods removeObject:_dragTool];
+        CCLOG(@"AFTER ADD THERE IS %lu PATH WOODS", (unsigned long)[_pathWoods count]);
+        CCLOG(@"UPDTAE WOODS ARRAY");
         [self configureSystemSound:0];
         [self playSystemSound];
     }
@@ -508,7 +527,7 @@ static float longPressThreshold = 0.5f;
         _movingNode.position = ccp(_movingNode.position.x - (_character.physicsBody.velocity.x * delta), _movingNode.position.y);
     }
     else{
-        CCLOG(@"jumpING %f", _timeSinceJump);
+        //CCLOG(@"jumpING %f", _timeSinceJump);
         _timeSinceJump += delta;
         _movingNode.position = ccp(_movingNode.position.x - (100*_jumpDegree * delta), _movingNode.position.y);
         //jump action is fixed to 1 sec
@@ -577,7 +596,7 @@ static float longPressThreshold = 0.5f;
         [enemyToRemove removeFromParent];
         [_enemies removeObject:enemyToRemove];
     }
-    
+    /*
     for (CCNode *tool in _pathWoods) {
         CGPoint toolWorldPosition = [_contentNode convertToWorldSpace:tool.position];
         CGPoint toolScreenPosition = [self convertToNodeSpace:toolWorldPosition];
@@ -592,7 +611,7 @@ static float longPressThreshold = 0.5f;
         //CCLOG(@"REMOVE");
         [toolToRemove removeFromParent];
         [_pathWoods removeObject:toolToRemove];
-    }
+    }*/
     
     for (CCNode *tool in _floatingWoods) {
         CGPoint toolWorldPosition = [_contentNode convertToWorldSpace:tool.position];
@@ -628,7 +647,7 @@ static float longPressThreshold = 0.5f;
         [_weapons removeObject:weaponToRemove];
     }
     
-    _prevTool = [_pathWoods lastObject];
+    //_prevTool = [_pathWoods lastObject];
     
     if(_falling || _jumping){
         //in falling or jumping, Mr.Woodie faces the danger of drowning
@@ -649,7 +668,7 @@ static float longPressThreshold = 0.5f;
         @try
         {
             if(_apartCount >= _safeCount){
-                CCLOG(@"un safe falling!!!!!!!!!!!!");
+                //CCLOG(@"un safe falling!!!!!!!!!!!!");
                 _safe = FALSE;
                 _falling = TRUE;
                 _character.physicsBody.affectedByGravity = TRUE;
@@ -677,7 +696,7 @@ static float longPressThreshold = 0.5f;
             //woods are continuously removed but not enemies
             if(_timeSinceAppear > (double)woodInterval*2){
                     if(_floatingWoods) {
-                        CCLOG(@"REMOVE FLOATING WOODS");
+                        //CCLOG(@"REMOVE FLOATING WOODS");
                         CCNode *wood = [_floatingWoods firstObject];
                         [_contentNode removeChild:wood];
                         [_floatingWoods removeObject:wood];
@@ -715,7 +734,31 @@ static float longPressThreshold = 0.5f;
 
 -(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair tool:(CCSprite *)tool enemy:(CCNode*)enemy {
     //CCLOG(@"Overlap");
-    [self toolDestroyed:tool];
+    //[self toolDestroyed:tool];
+    CCLOG(@"!!!!!!!!!!!!!!!!!TOOL DESTROY START");
+    // load particle effect
+    CCParticleSystem *explosion = (CCParticleSystem *)[CCBReader load:@"WoodEaten"];
+    // place the particle effect on the tool position
+    explosion.position = tool.position;
+    // add the particle effect to the same node the tool is on
+    [tool.parent addChild:explosion];
+    // make the particle effect clean itself up, once it is completed
+    explosion.autoRemoveOnFinish = YES;
+    CCLOG(@"!!!!!!!!!!!!!!!!!!!!EXPLOSION AUTO REMOVE");
+    /*if(tool == _prevTool){
+        CCLOG(@"!!!!!!!!!!!!!!!!YES, IT IS THE PREV TOOL");
+        [_pathWoods removeObject:tool];
+        _prevTool = [_pathWoods lastObject];
+    }*/
+    CCLOG(@"!!!!!!!!!!!!!!!!!!!!CHECK IF PREV");
+    [_floatingWoods removeObject:tool];
+    [tool removeFromParent];
+    CCLOG(@"!!!!!!!!!!!!!!!!!!!!REMOVE THE TOOL");
+    /*if ( [ _contentNode.children indexOfObject:tool ] == NSNotFound ) {
+        
+        // you can add the code here
+        CCLOG(@"YES, TOOL IS NO LONGER IN CONTENT NODE");
+    }*/
     return TRUE;
 }
 -(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair enemy:(CCNode *)enemy weapon:(CCSprite*)weapon {
@@ -734,7 +777,7 @@ static float longPressThreshold = 0.5f;
 -(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair*)pair hero:(CCSprite *)hero tool:(CCSprite*)tool {
     //_character.physicsBody.affectedByGravity = FALSE;
     _safeCount += 1;
-    CCLOG(@"SAFE %d", _safeCount);
+    //CCLOG(@"SAFE %d", _safeCount);
     _safe = TRUE;
     _jumping = FALSE;
     [_character.animationManager runAnimationsForSequenceNamed:@"NewWoodie"];
@@ -748,7 +791,7 @@ static float longPressThreshold = 0.5f;
     //_character.physicsBody.affectedByGravity = FALSE;
     _safeCount += 1;
     //_apartCount = 0;
-    CCLOG(@"SAFE STATION %d", _safeCount);
+    //CCLOG(@"SAFE STATION %d", _safeCount);
     _safe = TRUE;
     _timeSinceJump = 0.0f;
     _prevTool = station;
@@ -760,19 +803,19 @@ static float longPressThreshold = 0.5f;
 
 - (void)ccPhysicsCollisionSeparate:(CCPhysicsCollisionPair*)pair hero:(CCSprite *)hero tool:(CCSprite*)tool {
     _apartCount += 1;
-    CCLOG(@"APART %d", _apartCount);
+    //CCLOG(@"APART %d", _apartCount);
     if(!_jumping){
         //_apartCount += 1;
-        CCLOG(@"APART %d", _apartCount);
+        //CCLOG(@"APART %d", _apartCount);
         if(_apartCount >= _safeCount){
-            CCLOG(@"unsafe falling!!!!!!!!!!!!");
+            //CCLOG(@"unsafe falling!!!!!!!!!!!!");
             _safe = FALSE;
             _falling = TRUE;
             _character.physicsBody.affectedByGravity = TRUE;
             _character.physicsBody.velocity = ccp(0, -200);
         }
     }else{
-        CCLOG(@"APART DETECTED DURING JUMPING");
+        //CCLOG(@"APART DETECTED DURING JUMPING");
     }
     /*
     if(_apartCount >= _safeCount){
@@ -788,19 +831,19 @@ static float longPressThreshold = 0.5f;
 
 - (void)ccPhysicsCollisionSeparate:(CCPhysicsCollisionPair*)pair hero:(CCSprite *)hero station:(CCSprite*)station {
     _apartCount += 1;
-    CCLOG(@"APART STATION %d", _apartCount);
+    //CCLOG(@"APART STATION %d", _apartCount);
     if(!_jumping){
         //_apartCount += 1;
-        CCLOG(@"APART %d", _apartCount);
+        //CCLOG(@"APART %d", _apartCount);
         if(_apartCount >= _safeCount){
-            CCLOG(@"unsafe falling!!!!!!!!!!!!");
+            //CCLOG(@"unsafe falling!!!!!!!!!!!!");
             _safe = FALSE;
             _falling = TRUE;
             _character.physicsBody.affectedByGravity = TRUE;
             _character.physicsBody.velocity = ccp(0, -200);
         }
     }else{
-        CCLOG(@"APART DETECTED DURING JUMPING");
+        //CCLOG(@"APART DETECTED DURING JUMPING");
     }
     
     /*if(_apartCount >= _safeCount){
@@ -815,6 +858,7 @@ static float longPressThreshold = 0.5f;
 }
 
 - (void)toolDestroyed:(CCSprite *)tool {
+    /*CCLOG(@"!!!!!!!!!!!!!!!!!TOOL DESTROY START");
     // load particle effect
     CCParticleSystem *explosion = (CCParticleSystem *)[CCBReader load:@"WoodEaten"];
     // place the particle effect on the tool position
@@ -823,12 +867,15 @@ static float longPressThreshold = 0.5f;
     [tool.parent addChild:explosion];
     // make the particle effect clean itself up, once it is completed
     explosion.autoRemoveOnFinish = YES;
+    CCLOG(@"!!!!!!!!!!!!!!!!!!!!EXPLOSION AUTO REMOVE");
     if(tool == _prevTool){
         [_pathWoods removeObject:tool];
         _prevTool = [_pathWoods lastObject];
     }
-    [tool removeFromParent];
+    CCLOG(@"!!!!!!!!!!!!!!!!!!!!CHECK IF PREV");
     [_floatingWoods removeObject:tool];
+    [tool removeFromParent];
+    CCLOG(@"!!!!!!!!!!!!!!!!!!!!REMOVE THE TOOL");*/
     
     
 }
