@@ -17,9 +17,8 @@
 - (void)placeTool;//abstract
 - (void)applyWeapon;
 - (void)releaseWeapon;
-- (void)gameOver;
+- (void)gameOver:(int)status;
 - (void)restart;
-- (void)showScore;
 - (void)addEnemy;
 - (void)toolDestroyed:(CCSprite *)tool;
 - (void)enemyKilled:(CCNode *)enemy;

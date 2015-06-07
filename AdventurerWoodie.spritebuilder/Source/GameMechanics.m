@@ -18,7 +18,7 @@
 
 #define ARC4RANDOM_MAX      0x100000000
 static NSString * const kFirstLevel = @"Level1";
-static NSString *selectedLevel = @"Level1";
+static NSString *selectedLevel = @"Level2";
 static int levelNum = 0;
 static int levelSpeed = 0;
 static int enemyInterval = 0;
@@ -170,7 +170,7 @@ static float longPressThreshold = 0.5f;
         @try
         {
             CGPoint touchLocation = [touch locationInNode:self];
-            //firts check if weapon is dragged
+            //first check if weapon is dragged
             if (CGRectContainsPoint([_weapon boundingBox], touchLocation))
             {
                 dragWeapon = TRUE;
@@ -195,7 +195,7 @@ static float longPressThreshold = 0.5f;
                         //CCLOG(@"DRAG DETECTED");
                         dragTool = TRUE;
                         _dragTool = tool;//update _dragTool
-                        _dragTool.position = screenPosition;
+                        //_dragTool.position = screenPosition;
                         break;
                     }
                 }
@@ -299,7 +299,7 @@ static float longPressThreshold = 0.5f;
         //woods used to build path for Mr.Woodie would no longer be eaten by enemies
         _dragTool.physicsBody.collisionMask = @[@"hero"];
         _dragTool.physicsBody.sensor = TRUE;
-        _dragTool.position = ccp(_prevTool.position.x+(_prevTool.contentSize.width/2)+(_dragTool.contentSize.width/2), _prevTool.position.y);
+        _dragTool.position = ccp(_prevTool.position.x+(_prevTool.contentSize.width), _prevTool.position.y);
         //update latest wood
         _prevTool = _dragTool;
         [_pathWoods addObject:_dragTool];
@@ -521,7 +521,7 @@ static float longPressThreshold = 0.5f;
         }
     }
     
-    //cloud and bg canvus moving at different speed
+    //cloud and bg canvas moving at different speed
     _cloudNode.position = ccp(_cloudNode.position.x - ((_character.physicsBody.velocity.x)*delta), _cloudNode.position.y);
     _bgNode.position = ccp(_bgNode.position.x - ((_character.physicsBody.velocity.x/2)*delta), _bgNode.position.y);
     
@@ -627,6 +627,8 @@ static float longPressThreshold = 0.5f;
         [weaponToRemove removeFromParent];
         [_weapons removeObject:weaponToRemove];
     }
+    
+    _prevTool = [_pathWoods lastObject];
     
     if(_falling || _jumping){
         //in falling or jumping, Mr.Woodie faces the danger of drowning
@@ -821,8 +823,13 @@ static float longPressThreshold = 0.5f;
     [tool.parent addChild:explosion];
     // make the particle effect clean itself up, once it is completed
     explosion.autoRemoveOnFinish = YES;
+    if(tool == _prevTool){
+        [_pathWoods removeObject:tool];
+        _prevTool = [_pathWoods lastObject];
+    }
     [tool removeFromParent];
     [_floatingWoods removeObject:tool];
+    
     
 }
 - (void)enemyKilled:(CCNode *)enemy {

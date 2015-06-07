@@ -103,8 +103,8 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>0.5</real>
-									<real>0.5</real>
+									<real>1</real>
+									<real>1</real>
 									<false/>
 									<integer>0</integer>
 								</array>
@@ -117,7 +117,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>BG/level4.png</string>
+									<string>BG/level11.png</string>
 								</array>
 							</dict>
 							<dict>
@@ -186,7 +186,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>581</real>
+									<real>1162</real>
 									<real>0.0</real>
 									<integer>0</integer>
 									<integer>0</integer>
@@ -211,8 +211,8 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>0.5</real>
-									<real>0.5</real>
+									<real>1</real>
+									<real>1</real>
 									<false/>
 									<integer>0</integer>
 								</array>
@@ -225,7 +225,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>BG/level4.png</string>
+									<string>BG/level11.png</string>
 								</array>
 							</dict>
 							<dict>
@@ -261,6 +261,8 @@
 								<array/>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
@@ -352,6 +354,8 @@
 						<string></string>
 						<key>displayName</key>
 						<string>clouds</string>
+						<key>hidden</key>
+						<true/>
 						<key>memberVarAssignmentName</key>
 						<string>_cloud1</string>
 						<key>memberVarAssignmentType</key>
@@ -773,8 +777,6 @@
 				</array>
 			</dict>
 		</array>
-		<key>selected</key>
-		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>

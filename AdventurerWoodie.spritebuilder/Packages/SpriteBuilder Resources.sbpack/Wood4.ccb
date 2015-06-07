@@ -40,7 +40,7 @@
 		<key>children</key>
 		<array/>
 		<key>customClass</key>
-		<string>Wood</string>
+		<string></string>
 		<key>displayName</key>
 		<string>CCSprite</string>
 		<key>memberVarAssignmentName</key>
@@ -82,32 +82,32 @@
 					<real>1.6484375</real>
 				</array>
 				<array>
-					<real>0.859375</real>
-					<real>29.59375</real>
+					<real>2.08984375</real>
+					<real>29.6875</real>
 				</array>
 				<array>
-					<real>30.1796875</real>
-					<real>30.2890625</real>
+					<real>43.86328125</real>
+					<real>29.85546875</real>
 				</array>
 				<array>
-					<real>29.9140625</real>
-					<real>1.70703125</real>
+					<real>44.55859375</real>
+					<real>1.41015625</real>
 				</array>
 			</array>
 			<key>polygons</key>
 			<array>
 				<array>
 					<array>
-						<real>29.9140625</real>
-						<real>1.70703125</real>
+						<real>44.55859375</real>
+						<real>1.41015625</real>
 					</array>
 					<array>
-						<real>30.1796875</real>
-						<real>30.2890625</real>
+						<real>43.86328125</real>
+						<real>29.85546875</real>
 					</array>
 					<array>
-						<real>0.859375</real>
-						<real>29.59375</real>
+						<real>2.08984375</real>
+						<real>29.6875</real>
 					</array>
 					<array>
 						<real>1.7890625</real>
@@ -147,7 +147,7 @@
 				<string>Point</string>
 				<key>value</key>
 				<array>
-					<real>0.5</real>
+					<real>0.0</real>
 					<real>0.5</real>
 				</array>
 			</dict>

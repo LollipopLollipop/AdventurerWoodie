@@ -798,8 +798,6 @@
 										<string>NewWoodie.ccb</string>
 									</dict>
 								</array>
-								<key>selected</key>
-								<true/>
 							</dict>
 							<dict>
 								<key>UUID</key>
@@ -833,7 +831,7 @@
 										<string>Position</string>
 										<key>value</key>
 										<array>
-											<real>50</real>
+											<real>0.0</real>
 											<real>65</real>
 											<integer>0</integer>
 											<integer>0</integer>
@@ -862,6 +860,8 @@
 										<string>Station1.ccb</string>
 									</dict>
 								</array>
+								<key>selected</key>
+								<true/>
 							</dict>
 							<dict>
 								<key>UUID</key>

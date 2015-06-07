@@ -103,8 +103,8 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>0.5</real>
-									<real>0.40000000596046448</real>
+									<real>1</real>
+									<real>0.80000001192092896</real>
 									<false/>
 									<integer>0</integer>
 								</array>
@@ -117,7 +117,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>BG/level7.png</string>
+									<string>BG/level14.png</string>
 								</array>
 							</dict>
 							<dict>
@@ -186,7 +186,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>877</real>
+									<real>1754</real>
 									<real>-10</real>
 									<integer>0</integer>
 									<integer>0</integer>
@@ -211,8 +211,8 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>0.5</real>
-									<real>0.40000000596046448</real>
+									<real>1</real>
+									<real>0.80000001192092896</real>
 									<false/>
 									<integer>0</integer>
 								</array>
@@ -225,7 +225,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>BG/level7.png</string>
+									<string>BG/level14.png</string>
 								</array>
 							</dict>
 							<dict>
@@ -261,6 +261,8 @@
 								<array/>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
@@ -562,6 +564,8 @@
 				<string></string>
 				<key>displayName</key>
 				<string>CCNode</string>
+				<key>hidden</key>
+				<true/>
 				<key>memberVarAssignmentName</key>
 				<string>_cloudNode</string>
 				<key>memberVarAssignmentType</key>
@@ -773,8 +777,6 @@
 				</array>
 			</dict>
 		</array>
-		<key>selected</key>
-		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>
